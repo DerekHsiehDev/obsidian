@@ -1,3 +1,4 @@
+import ChatContent from "./components/ChatContent";
 import Navbar from "./components/Navbar";
 
 export default function Home() {
@@ -7,7 +8,9 @@ export default function Home() {
         <Navbar />
       {/* </nav> */}
       <div className="flex flex-row flex-1">
-        <div className="w-1/2 bg-gray-300">chat content</div>
+        <div className="w-1/2 bg-gray-300">
+        <ChatContent/>
+        </div>
         <div className="w-1/2 flex flex-col">
           <div className="flex-1 bg-gray-400">video content</div>
           <div className="flex-1 bg-gray-200">stats content</div>

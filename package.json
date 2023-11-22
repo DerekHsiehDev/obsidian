@@ -12,7 +12,11 @@
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@tailwindcss/forms": "^0.5.7",
+    "axios": "^1.6.2",
+    "dotenv-safe": "^8.2.0",
+    "envalid": "^8.0.0",
     "next": "14.0.3",
+    "openai": "^4.20.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

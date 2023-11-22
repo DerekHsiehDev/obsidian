@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
+
+const { config } = require('dotenv-safe');
+
+config({
+  allowEmptyValues: false,
+  example: '.env.example',
+});
+
+
 const nextConfig = {};
+
 
 module.exports = nextConfig;
 

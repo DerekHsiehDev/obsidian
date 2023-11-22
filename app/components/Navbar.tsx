@@ -31,7 +31,6 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   return (
     <>
-      {/* When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars */}
       <Popover
         as="header"
         className={({ open }) =>
