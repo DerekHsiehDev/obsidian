@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
-    <main className="flex flex-col min-h-screen">
+  <main className="flex flex-col max-h-screen overflow-hidden">
       {/* <nav className="p-4"> */}
         <Navbar />
       {/* </nav> */}
