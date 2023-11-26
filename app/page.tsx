@@ -1,5 +1,7 @@
+"use client"
 import ChatContent from "./components/ChatContent";
 import Navbar from "./components/Navbar";
+import VideoContent from "./components/VideoContent";
 
 export default function Home() {
   return (
@@ -10,7 +12,9 @@ export default function Home() {
         <ChatContent/>
         </div>
         <div className="w-1/2 flex flex-col">
-          <div className="flex-1 bg-gray-400">video content</div>
+          <div className="flex-1 bg-gray-400">
+            <VideoContent/>
+          </div>
           <div className="flex-1 bg-gray-200">stats content</div>
         </div>
       </div>
