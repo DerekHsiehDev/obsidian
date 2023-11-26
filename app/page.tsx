@@ -3,12 +3,10 @@ import Navbar from "./components/Navbar";
 
 export default function Home() {
   return (
-  <main className="flex flex-col max-h-screen overflow-hidden">
-      {/* <nav className="p-4"> */}
+  <main className="flex flex-col max-h-screen h-screen overflow-hidden">
         <Navbar />
-      {/* </nav> */}
-      <div className="flex flex-row flex-1">
-        <div className="w-1/2 bg-gray-300">
+      <div className="flex flex-row flex-1 h-full">
+        <div className="w-1/2">
         <ChatContent/>
         </div>
         <div className="w-1/2 flex flex-col">

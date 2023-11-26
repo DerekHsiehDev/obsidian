@@ -1,12 +1,19 @@
 import Editor from "@monaco-editor/react";
 
-const CodeEditor = (props) => {
+interface codeEditorProps {
+  onChange: (value: string | undefined) => void;
+  startingCode?: string
+}
+
+const CodeEditor = ({startingCode, onChange}: codeEditorProps) => {
+
+  const defaultValue = startingCode ? startingCode : "// your code here!";
+
   return (
     <Editor
-    //   height="70%" // By default, it's 100%
-      defaultLanguage="javascript"
-      defaultValue="// some comment"
-      {...props} // Spread additional props if needed
+      onChange={onChange}
+      defaultLanguage="typescript"
+      defaultValue={defaultValue}
     />
   );
 };

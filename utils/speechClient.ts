@@ -9,7 +9,8 @@ declare global {
   }
 }
 
-const globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+const AudioContext: typeof window.AudioContext = window.AudioContext || window.webkitAudioContext;
+const globalAudioContext = new AudioContext();
 
 const speechToText = async (text: string) => {
   const data = { text };
