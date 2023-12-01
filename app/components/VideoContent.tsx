@@ -1,55 +1,92 @@
 "use client";
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import useWindowSize from "@/hooks/useWindowSize";
+import { useDataStore } from "@/stores/dataStore";
 
-// @ts-ignore -> need to ignore bc webgazer written in js
-const WebGazerNoSSR = dynamic(() => import("webgazer"), { ssr: false });
+declare global {
+  interface Window {
+    webgazer: any;
+  }
+}
 
 function VideoContent() {
   const [showPoints, setShowPoints] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
+  const [intervalMs, setIntervalMs] = useState(1000); // Desired interval for the gaze listener in milliseconds.
+
+  const { setCurrentEyeTrackingState } = useDataStore();
+
+  const size = useWindowSize();
 
   useEffect(() => {
     const loadWebgazer = async () => {
+      // @ts-ignore webgazer is written in JS, so no typing is available
+
       const webgazer = (await import("webgazer")).default;
       window.webgazer = webgazer;
+
       await window.webgazer.begin();
+      window.webgazer.showPredictionPoints(false);
 
-      let counter = 0;
-      // process every nth prediction
-      const nthPrediction = 25;
-
+      // Set up gaze listener with desired interval
       window.webgazer
-        .setGazeListener((data, elapsedTime) => {
-          if (data == null) {
+        .setGazeListener((data: any, elapsedTime: number) => {
+          if (data === null) {
             return;
           }
-          counter++;
-          if (counter % nthPrediction === 0) {
-            console.log(elapsedTime, data); // data is an object containing an x and y property which are the x and y prediction coordinates (no bounds limiting)
+
+          // Convert elapsedTime from milliseconds to seconds for better readability
+          const elapsedTimeInSeconds = (elapsedTime / 1000).toFixed(2);
+
+          console.log(data.x, size.width)
+          console.log(data.y, size.height)
+
+          if (data.x < size.width / 2) {
+
+            
+            console.log("chat");
+            setCurrentEyeTrackingState("chat");
+          } else {
+            // check if is top right or bottom right
+            if (data.y < size.height / 2) {
+              console.log("video");
+              setCurrentEyeTrackingState("video");
+            } else {
+              console.log("video");
+              setCurrentEyeTrackingState("stats");
+            }
           }
+
+          window.webgazer.pause();
+
+          // Schedule a resume after the interval
+          setTimeout(() => {
+            window.webgazer.resume();
+          }, intervalMs);
         })
         .begin();
 
-      window.webgazer.showPredictionPoints(showPoints);
+      return () => {
+        window.webgazer?.end(); // Clean up WebGazer instance on unmount
+      };
     };
+
     loadWebgazer();
-  }, []);
+  }, [showPoints, intervalMs]); // Only re-run the effect if showPoints or intervalMs changes
 
   const togglePoints = () => {
-    setShowPoints(!showPoints);
-    window.webgazer.showPredictionPoints(showPoints);
+    setShowPoints((prev) => {
+      const newShowPoints = !prev;
+      window.webgazer.showPredictionPoints(newShowPoints);
+      return newShowPoints;
+    });
   };
 
-  return (
-    <button onClick={togglePoints} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {showPoints ? "Hide" : "Show"} Prediction Points
-    </button>
-  )
+  const toggleVideo = () => {
+    setShowVideo((prev) => !prev);
+  };
+
+  return <div>video content</div>;
 }
 
 export default VideoContent;
-
-
-
-
-  
