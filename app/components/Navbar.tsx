@@ -31,7 +31,9 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
-  let [calibrationOpen, setCalibrationOpen] = useState(true);
+//  let [calibrationOpen, setCalibrationOpen] = useState(true);
+ let [calibrationOpen, setCalibrationOpen] = useState(false);
+
   const { currentEyeTrackingState } = useDataStore()
 
   return (

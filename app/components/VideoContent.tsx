@@ -47,14 +47,8 @@ function VideoContent() {
             console.log("chat");
             setCurrentEyeTrackingState("chat");
           } else {
-            // check if is top right or bottom right
-            if (data.y < size.height / 2) {
-              console.log("video");
-              setCurrentEyeTrackingState("video");
-            } else {
-              console.log("video");
-              setCurrentEyeTrackingState("stats");
-            }
+            console.log('stats')
+            setCurrentEyeTrackingState("stats");
           }
 
           window.webgazer.pause();
@@ -71,7 +65,8 @@ function VideoContent() {
       };
     };
 
-    loadWebgazer();
+    // UNCOMMENT THIS OUT
+    // loadWebgazer();
   }, [showPoints, intervalMs]); // Only re-run the effect if showPoints or intervalMs changes
 
   const togglePoints = () => {
