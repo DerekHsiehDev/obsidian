@@ -21,8 +21,8 @@ const StatsContent = () => {
         <TabsTrigger value={Tab.gpt}>GPT</TabsTrigger>
       </TabsList>
       <TabsContent value={Tab.stats}>Stats</TabsContent>
-      <TabsContent value={Tab.web} className="w-full h-screen">
-        <iframe src="https://www.bing.com" className="w-full"></iframe>
+      <TabsContent value={Tab.web} className="w-full"> 
+      <iframe src="https://www.bing.com" style={{width: '100%', height: '100vh'}}></iframe>
       </TabsContent>
       <TabsContent value={Tab.gpt}>
         <IMessageUI />
@@ -120,9 +120,10 @@ function IMessageUI() {
   ]);
 
   return (
-    <div className="w-full rounded-lg overflow-hidden mr-4 max-h">
-      <div className="bg-white p-4 pr-3 flex-grow overflow-auto">
-        <div className="space-y-2">
+    <div className="w-full rounded-lg overflow-hidden mr-4">
+    <div className="bg-white p-4 pr-3 flex-grow overflow-auto" style={{ maxHeight: '90vh' }}> 
+      <div className="space-y-2">
+        <div className="mb-7">
           {messages.map((message, index) => (
             <div
               key={index}
@@ -162,6 +163,7 @@ function IMessageUI() {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
       <div className="fixed bottom-0 right-0 w-1/2 flex items-center bg-white rounded-full p-2">

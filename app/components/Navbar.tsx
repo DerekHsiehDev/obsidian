@@ -7,6 +7,7 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Logo } from "./Logo";
 import EyeCalibration from "@/components/EyeCalibration";
 import { useDataStore } from "@/stores/dataStore";
+import PriorDialog from "./PriorDialog";
 
 const user = {
   name: "Chelsea Hagon",
@@ -32,7 +33,8 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
 //  let [calibrationOpen, setCalibrationOpen] = useState(true);
- let [calibrationOpen, setCalibrationOpen] = useState(false);
+ const [calibrationOpen, setCalibrationOpen] = useState(false);
+ const [priorsOpen, setPriorsOpen] = useState(true);
 
   const { currentEyeTrackingState } = useDataStore()
 
@@ -66,40 +68,11 @@ export default function Navbar() {
                         {currentEyeTrackingState}
                       </div>
 
-                      {/* <label htmlFor="search" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                          <MagnifyingGlassIcon
-                            className="h-5 w-5 text-gray-400"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <input
-                          id="search"
-                          name="search"
-                          className="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
-                          placeholder="Search"
-                          type="search"
-                        />
-                      </div> */}
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center md:absolute md:inset-y-0 md:right-0 lg:hidden">
-                  {/* Mobile menu button */}
-                  <Popover.Button className="relative -mx-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                    <span className="absolute -inset-0.5" />
-                    <span className="sr-only">Open menu</span>
-                    {open ? (
-                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                    ) : (
-                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                    )}
-                  </Popover.Button>
-                </div>
-                <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4">
+              
+                <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4 w-full">
                   <button
                     type="button"
                     className="relative ml-5 flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -111,12 +84,12 @@ export default function Navbar() {
                   <button onClick={() => setCalibrationOpen(!calibrationOpen)}>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
-                  <a
-                    href="#"
+                  <PriorDialog/>
+                  <button
                     className="ml-6 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Skip Question
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -133,6 +106,8 @@ export default function Navbar() {
           <EyeCalibration setCalibrationOpen={setCalibrationOpen} />
         </Dialog>
       </Transition>
+
+          
     </>
   );
 }

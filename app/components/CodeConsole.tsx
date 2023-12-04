@@ -5,15 +5,15 @@ import {
 import { syntaxHighlight } from "@/utils/syntaxHighlight";
 
 const CodeConsole = () => {
-  const { runtime,  compilationStatus, output } = useCompilationStore();
+  const { runtime, compilationStatus, output } = useCompilationStore();
 
   const cleanOutput = (output: string) => {
     try {
       // Remove non-printable and other non-valid JSON chars
-      output = output.replace(/[\u0000-\u0019]+/g,"");
+      output = output.replace(/[\u0000-\u0019]+/g, "");
       let parsedOutput = JSON.parse(output);
       // Check if the parsed output is a string that can be parsed again
-      if (typeof parsedOutput === 'string') {
+      if (typeof parsedOutput === "string") {
         try {
           parsedOutput = JSON.parse(parsedOutput);
         } catch (e) {
@@ -26,7 +26,6 @@ const CodeConsole = () => {
       return null;
     }
   };
-  
 
   const compilationText = () => {
     switch (compilationStatus) {
@@ -55,7 +54,10 @@ const CodeConsole = () => {
   };
 
   return (
-    <div className="shadow rounded-lg p-4 w-full mx-auto h-500">
+    <div
+      className="absolute bottom-3 left-4 shadow rounded-lg p-4 h-500"
+      style={{ width: "47%" }}
+    >
       <div className="flex justify-between items-center mb-4">
         <span className={` ${titleColor()} font-bold`}>
           {compilationText()}
@@ -74,11 +76,7 @@ const CodeConsole = () => {
                 dangerouslySetInnerHTML={{
                   __html:
                     output !== ""
-                      ? syntaxHighlight(
-                          JSON.stringify(
-                            cleanOutput(output)
-                          )
-                        )
+                      ? syntaxHighlight(JSON.stringify(cleanOutput(output)))
                       : "",
                 }}
               />
