@@ -26,6 +26,7 @@
     "monaco-editor": "^0.44.0",
     "next": "14.0.3",
     "openai": "^4.20.0",
+    "pdf-parse": "^1.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
@@ -34,10 +35,12 @@
     "vm": "^0.1.0",
     "vm2": "^3.9.19",
     "webgazer": "^3.3.0",
+    "zod": "^3.22.4",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
