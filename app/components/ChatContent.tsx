@@ -8,13 +8,26 @@ import { useState } from "react";
 import { RocketLaunchIcon } from "@heroicons/react/20/solid";
 import CodeConsole from "./CodeConsole";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import {
   CompilationStatus,
   useCompilationStore,
 } from "@/stores/compilationStore";
 import { useStore } from "zustand";
+import { CheckCircle } from "lucide-react";
 
 const data = {
-  text: "Hello, my name is Derek, and I'll be conducting your technical interview today. We'll start with a brief overview of your experience and skills, and then proceed to some technical questions related to your field. Please feel free to ask any questions or seek clarifications at any point.",
+  text: "We'll start with a brief overview of your experience and skills, and then proceed to some technical questions related to your field. Please feel free to ask any questions or seek clarifications at any point.",
 };
 
 interface Error {
@@ -29,30 +42,56 @@ interface Response {
   success: boolean;
   error?: Error;
   data?: {
-    result: string;
+    userResult: string;
+    correctResult: string;
     executionTime: string;
   };
 }
 
-const prompt =
-  "use TypeScript to create a class that interacts with the API endpoint `https://vertix.dev/api/users` through a `GET` request using `fetch`, NOT axios. Your class should include properly defined types for the API response and a method to perform the request. You need to execute this request three times, storing the results in an array within the class. After all requests are completed, output the array contents using `console.log`.";
+const prompt = `
+<ul class="list-disc list-inside">
+  <li class="mb-1">Use TypeScript to create a class that interacts with the API endpoint <b>https://interview-api-pi.vercel.app/api/users</b> through a <b>GET</b> request using <b>fetch</b>, NOT axios.</li>
+  <li class="mb-1">Your class should include properly defined types for the API response and a method to perform the request.</li>
+  <li class="mb-1">You need to execute this request three times, storing the results in an array within the class.</li>
+  <li class="mb-1">After all requests are completed, output the array contents using <b>console.log</b>.</li>
+  <li class="mb-1">Make sure to handle potential errors appropriately during the request execution and output them using <b>console.error</b>.</li>
+</ul>
+`;
 
 const ChatContent = () => {
   const [currentCode, setCurrentCode] = useState("");
 
   const [isPromptVisible, setPromptVisible] = useState(true);
 
+  const [isErrorSubmitOpen, setIsErrorSubmitOpen] = useState(false);
+
   const togglePrompt = () => {
     setPromptVisible(!isPromptVisible);
   };
 
-  const { output, setOutput, setRuntime, setCompilationStatus } =
-    useCompilationStore();
+  const {
+    output,
+    setOutput,
+    setRuntime,
+    setCompilationStatus,
+    correctOutput,
+    setCorrectOutput,
+  } = useCompilationStore();
 
   const handleEditorChange = (newCode: string | undefined) => {
     if (newCode) {
       setCurrentCode(newCode);
     }
+  };
+
+  const handleSubmit = () => {
+    if (output !== correctOutput || !correctOutput) {
+      setIsErrorSubmitOpen(true);
+      return
+    } 
+
+    // success
+    alert("Success! You can now move on to the next question.")
   };
 
   const handleCompile = async () => {
@@ -72,7 +111,8 @@ const ChatContent = () => {
 
     setCompilationStatus(CompilationStatus.SUCCESS);
     // data is never null when success is true
-    setOutput(JSON.stringify(response.data!.result, null, 4));
+    setOutput(JSON.stringify(response.data!.userResult, null, 4));
+    setCorrectOutput(JSON.stringify(response.data!.correctResult, null, 4));
     setRuntime(response.data!.executionTime);
   };
 
@@ -85,7 +125,7 @@ const ChatContent = () => {
       index % 2 === 0 ? part : <b key={index}>{part}</b>
     );
 
-    return <div>{elements}</div>;
+    return <div dangerouslySetInnerHTML={{ __html: prompt }} />;
   };
 
   const handlePlayAudio = () => {
@@ -112,10 +152,33 @@ const ChatContent = () => {
           <RocketLaunchIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
           Compile Code
         </button>
+
+        <button
+          type="button"
+          className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+          onClick={handleSubmit}
+        >
+          <CheckCircle className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+          Submit
+        </button>
       </div>
       <CodeEditor onChange={handleEditorChange} />
 
       <CodeConsole />
+
+      <AlertDialog open={isErrorSubmitOpen} onOpenChange={setIsErrorSubmitOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Incorrect Submission</AlertDialogTitle>
+            <AlertDialogDescription>
+              Your output did not match the expected output. Please try again.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

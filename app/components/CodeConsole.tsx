@@ -5,7 +5,7 @@ import {
 import { syntaxHighlight } from "@/utils/syntaxHighlight";
 
 const CodeConsole = () => {
-  const { runtime, compilationStatus, output } = useCompilationStore();
+  const { runtime, compilationStatus, output, correctOutput} = useCompilationStore();
 
   const cleanOutput = (output: string) => {
     try {
@@ -55,7 +55,7 @@ const CodeConsole = () => {
 
   return (
     <div
-      className="absolute bottom-3 left-4 shadow rounded-lg p-4 h-500"
+      className="absolute bottom-3 left-4 shadow rounded-lg p-4 h-500 z-10 bg-white"
       style={{ width: "47%" }}
     >
       <div className="flex justify-between items-center mb-4">
@@ -77,6 +77,23 @@ const CodeConsole = () => {
                   __html:
                     output !== ""
                       ? syntaxHighlight(JSON.stringify(cleanOutput(output)))
+                      : "",
+                }}
+              />
+            ) : (
+              output
+            )}
+          </pre>
+        </div>
+        <div className="text-gray-800 font-bold mb-1">Correct Output</div>
+        <div className="overflow-auto max-h-[900px]">
+          <pre className="overflow-auto bg-gray-100 text-sm rounded p-2 font-mono">
+            {output ? (
+              <code
+                dangerouslySetInnerHTML={{
+                  __html:
+                    output !== ""
+                      ? syntaxHighlight(JSON.stringify(cleanOutput(correctOutput)))
                       : "",
                 }}
               />

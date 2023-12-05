@@ -15,6 +15,8 @@ type CompilationState = {
   setOutput: (newOutput: string) => void;
   runtime: string;
   setRuntime: (newRuntime: string) => void;
+  setCorrectOutput: (newCorrectOutput: string) => void;
+  correctOutput: string;
 };
 
 
@@ -26,6 +28,8 @@ export const useCompilationStore = create<CompilationState>((set) => ({
 
   runtime: "",
   setRuntime: (newRuntime: string) => set(() => ({ runtime: newRuntime })),
+  setCorrectOutput: (newCorrectOutput: string) => set(() => ({ correctOutput: newCorrectOutput })),
+  correctOutput: "",
 }))
 
 

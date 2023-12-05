@@ -14,6 +14,7 @@ const ClockTimer = () => {
         setSelectedDisplay("precise");
     }
 
+    // @ts-ignore
     return () => clearInterval(timer);
   }, [time]);
 
