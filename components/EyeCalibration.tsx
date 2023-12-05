@@ -48,7 +48,7 @@ const EyeCalibration = ({ setCalibrationOpen }: eyeCalibrationProps) => {
   };
 
   return (
-    <div className="min-h-screen px-4 text-center">
+    <div className="min-h-screen px-4 text-center z-50">
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
       <span className="inline-block h-screen align-middle" aria-hidden="true">

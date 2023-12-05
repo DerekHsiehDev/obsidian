@@ -55,7 +55,7 @@ const CodeConsole = () => {
 
   return (
     <div
-      className="absolute bottom-3 left-4 shadow rounded-lg p-4 h-500 z-10 bg-white"
+      className="absolute bottom-3 left-4 shadow rounded-lg p-4 h-500 z-0 bg-white"
       style={{ width: "47%" }}
     >
       <div className="flex justify-between items-center mb-4">
