@@ -14,11 +14,11 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
-//  let [calibrationOpen, setCalibrationOpen] = useState(true);
- const [calibrationOpen, setCalibrationOpen] = useState(false);
- const [priorsOpen, setPriorsOpen] = useState(true);
+  //  let [calibrationOpen, setCalibrationOpen] = useState(true);
+  const [calibrationOpen, setCalibrationOpen] = useState(false);
+  const [priorsOpen, setPriorsOpen] = useState(true);
 
-  const { currentEyeTrackingState } = useDataStore()
+  const { currentEyeTrackingState } = useDataStore();
 
   return (
     <>
@@ -45,15 +45,13 @@ export default function Navbar() {
                 <div className="min-w-0 flex-1 md:px-8 lg:px-0 xl:col-span-6">
                   <div className="flex items-center px-6 py-4 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-none xl:px-0">
                     <div className="w-full">
-
-                      <div>
+                      <div style={{ display: "flex", flexDirection: "row" }}>
                         {currentEyeTrackingState}
                       </div>
-
                     </div>
                   </div>
                 </div>
-              
+
                 <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-4 w-full">
                   <button
                     type="button"
@@ -66,10 +64,8 @@ export default function Navbar() {
                   <button onClick={() => setCalibrationOpen(!calibrationOpen)}>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
-                  <PriorDialog/>
-                  <button
-                    className="ml-6 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
+                  <PriorDialog />
+                  <button className="ml-6 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     Skip Question
                   </button>
                 </div>
@@ -88,8 +84,6 @@ export default function Navbar() {
           <EyeCalibration setCalibrationOpen={setCalibrationOpen} />
         </Dialog>
       </Transition>
-
-          
     </>
   );
 }

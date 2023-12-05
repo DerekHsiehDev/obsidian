@@ -79,3 +79,10 @@
     position: absolute;
     left: -10000px !important;
 } 
+
+video {
+  transform: scaleX(-1);
+  max-height: 100%;
+  border-radius: 10px;
+  /* height: auto; */
+}

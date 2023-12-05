@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useDataStore } from "@/stores/dataStore";
+import VideoWebcam from "./Webcam";
 
 declare global {
   interface Window {
@@ -81,7 +82,9 @@ function VideoContent() {
     setShowVideo((prev) => !prev);
   };
 
-  return <div>video content</div>;
+  return (
+    <VideoWebcam/>
+  )
 }
 
 export default VideoContent;

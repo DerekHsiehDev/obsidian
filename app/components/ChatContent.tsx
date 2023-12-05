@@ -29,15 +29,25 @@ interface Response {
   success: boolean;
   error?: Error;
   data?: {
-    result: string
-    executionTime: string
-  }
+    result: string;
+    executionTime: string;
+  };
 }
+
+const prompt =
+  "use TypeScript to create a class that interacts with the API endpoint `https://vertix.dev/api/users` through a `GET` request using `fetch`, NOT axios. Your class should include properly defined types for the API response and a method to perform the request. You need to execute this request three times, storing the results in an array within the class. After all requests are completed, output the array contents using `console.log`.";
 
 const ChatContent = () => {
   const [currentCode, setCurrentCode] = useState("");
 
-  const { output, setOutput, setRuntime, setCompilationStatus } = useCompilationStore();
+  const [isPromptVisible, setPromptVisible] = useState(true);
+
+  const togglePrompt = () => {
+    setPromptVisible(!isPromptVisible);
+  };
+
+  const { output, setOutput, setRuntime, setCompilationStatus } =
+    useCompilationStore();
 
   const handleEditorChange = (newCode: string | undefined) => {
     if (newCode) {
@@ -63,7 +73,19 @@ const ChatContent = () => {
     setCompilationStatus(CompilationStatus.SUCCESS);
     // data is never null when success is true
     setOutput(JSON.stringify(response.data!.result, null, 4));
-    setRuntime(response.data!.executionTime)
+    setRuntime(response.data!.executionTime);
+  };
+
+  const cleanPrompt = (prompt: string) => {
+    // Split the prompt by backticks
+    const parts = prompt.split("`");
+
+    // Map over the parts and wrap every second part in a <b> tag
+    const elements = parts.map((part, index) =>
+      index % 2 === 0 ? part : <b key={index}>{part}</b>
+    );
+
+    return <div>{elements}</div>;
   };
 
   const handlePlayAudio = () => {
@@ -72,7 +94,16 @@ const ChatContent = () => {
 
   return (
     <div className="flex flex-col justify-between items-center h-full overflow-auto">
-      <div className="p-3 mr-auto">
+      <button
+        className="mt-3 py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+        onClick={togglePrompt}
+      >
+        {isPromptVisible ? "Minimize Prompt" : "Maximize Prompt"}
+      </button>
+      {isPromptVisible && (
+        <div className="text-sm m-3">{cleanPrompt(prompt)}</div>
+      )}
+      <div className="p-3 mr-auto flex flex-row justify-between items-center w-full">
         <button
           type="button"
           className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

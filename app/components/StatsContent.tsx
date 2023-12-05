@@ -2,9 +2,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { ArrowUpCircleIcon } from "@heroicons/react/20/solid";
-import { LucideArrowDownUp } from "lucide-react";
-import { setGlobal } from "next/dist/trace";
 import { useState } from "react";
+import StatsGraphView from "./StatsGraphView";
 
 enum Tab {
   stats = "stats",
@@ -14,13 +13,15 @@ enum Tab {
 
 const StatsContent = () => {
   return (
-    <Tabs defaultValue="account" className=" pt-3 w-full h-full">
+    <Tabs defaultValue={Tab.stats} className=" pt-3 w-full">
       <TabsList>
         <TabsTrigger value={Tab.stats}>Stats</TabsTrigger>
         <TabsTrigger value={Tab.web}>Web</TabsTrigger>
         <TabsTrigger value={Tab.gpt}>GPT</TabsTrigger>
       </TabsList>
-      <TabsContent value={Tab.stats}>Stats</TabsContent>
+      <TabsContent value={Tab.stats}>
+        <StatsGraphView/>
+      </TabsContent>
       <TabsContent value={Tab.web} className="w-full"> 
       <iframe src="https://www.bing.com" style={{width: '100%', height: '100vh'}}></iframe>
       </TabsContent>
@@ -114,7 +115,7 @@ function IMessageUI() {
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      content: "I'm here to help you remember syntax, and to help you find the right resources. Not to give you the answers!",
+      content: "I'm here to help you remember syntax, and find the right resources. Not to give you the answers!",
       role: "assistant",
     },
   ]);
