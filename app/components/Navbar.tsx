@@ -8,6 +8,7 @@ import { Logo } from "./Logo";
 import EyeCalibration from "@/components/EyeCalibration";
 import { useDataStore } from "@/stores/dataStore";
 import PriorDialog from "./PriorDialog";
+import { useGlobalState } from "@/stores/globalState";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -16,9 +17,12 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   //  let [calibrationOpen, setCalibrationOpen] = useState(true);
   const [calibrationOpen, setCalibrationOpen] = useState(false);
-  const [priorsOpen, setPriorsOpen] = useState(true);
 
   const { currentEyeTrackingState } = useDataStore();
+
+  // const { hasAddedPrior, setHasAddedPrior, hasDoneEyeTracking, setHasDoneEyeTracking } = useGlobalState();
+
+  const { openEyeTracking, setOpenEyeTracking } = useGlobalState();
 
   return (
     <>
@@ -75,13 +79,13 @@ export default function Navbar() {
         )}
       </Popover>
 
-      <Transition show={calibrationOpen} as={Fragment}>
+      <Transition show={openEyeTracking} as={Fragment}>
         <Dialog
-          open={calibrationOpen}
+          open={openEyeTracking}
           onClose={() => setCalibrationOpen(false)}
           className="fixed inset-0 flex items-center justify-center"
         >
-          <EyeCalibration setCalibrationOpen={setCalibrationOpen} />
+          <EyeCalibration setCalibrationOpen={setOpenEyeTracking} />
         </Dialog>
       </Transition>
     </>

@@ -15,6 +15,7 @@ type PriorState = {
   setMedianMeanVariance: (newMedianMeanVariance: any) => void;
 
   medianMeanVariance: any;
+
 };
 
 export const usePriorStore = create<PriorState>((set) => ({

@@ -24,11 +24,8 @@ import {
 import { useStore } from "zustand";
 import { CheckCircle } from "lucide-react";
 import naiveBayes from "@/utils/bagOfWords";
-import {
-  correctCode,
-  interfaceTyping,
-  typeTyping,
-} from "@/lib/correctCode";
+import { correctCode, interfaceTyping, typeTyping } from "@/lib/correctCode";
+import { useBehavioralStore } from "@/stores/behavioralStore";
 
 const data = {
   text: "We'll start with a brief overview of your experience and skills, and then proceed to some technical questions related to your field. Please feel free to ask any questions or seek clarifications at any point.",
@@ -61,6 +58,7 @@ const prompt = `
 </ul>
 `;
 
+
 const ChatContent = () => {
   const [currentCode, setCurrentCode] = useState("");
 
@@ -71,6 +69,12 @@ const ChatContent = () => {
   const togglePrompt = () => {
     setPromptVisible(!isPromptVisible);
   };
+
+  const [isShowingCodeProblem, setIsShowingCodeProblem] = useState(false);
+
+  const { currentInterviewPrompt, setCurrentInterviewPrompt} = useBehavioralStore();
+
+  const [aiInterviewerState, setAiInterviewerState] = useState<"talking" | "listening" | "paused">("paused");
 
   const {
     output,
@@ -102,16 +106,12 @@ const ChatContent = () => {
       // first check with normal typescript Type typing syntax
       // console.log(naiveBayes(typeTyping + "\n" + testCode, currentCode));
 
-      maxScore = Math.max(
-        maxScore,
-        naiveBayes(testCode, currentCode)
-      );
+      maxScore = Math.max(maxScore, naiveBayes(testCode, currentCode));
 
       // console.log(naiveBayes(testCode, currentCode))
 
       // then check with typescript interface typing syntax
       // console.log(naiveBayes(interfaceTyping + "\n" + testCode, currentCode));
-
     }
 
     console.log("max score", maxScore);
@@ -154,57 +154,86 @@ const ChatContent = () => {
     return <div dangerouslySetInnerHTML={{ __html: prompt }} />;
   };
 
-  const handlePlayAudio = () => {
-    speechToText(data.text);
+  const handlePlayAudio = async (text: string) => {
+    setAiInterviewerState("talking")
+    const finishedState = await speechToText(text);
+    setAiInterviewerState("listening");
   };
 
   return (
     <div className="flex flex-col justify-between items-center h-full overflow-auto">
-      <button
-        className="mt-3 py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-        onClick={togglePrompt}
-      >
-        {isPromptVisible ? "Minimize Prompt" : "Maximize Prompt"}
-      </button>
-      {isPromptVisible && (
-        <div className="text-sm m-3">{cleanPrompt(prompt)}</div>
+      {isShowingCodeProblem ? (
+        <>
+          <button
+            className="mt-3 py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            onClick={togglePrompt}
+          >
+            {isPromptVisible ? "Minimize Prompt" : "Maximize Prompt"}
+          </button>
+          {isPromptVisible && (
+            <div className="text-sm m-3">{cleanPrompt(prompt)}</div>
+          )}
+          <div className="p-3 mr-auto flex flex-row justify-between items-center w-full">
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleCompile}
+            >
+              <RocketLaunchIcon
+                className="-ml-0.5 h-5 w-5"
+                aria-hidden="true"
+              />
+              Compile Code
+            </button>
+
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              onClick={handleSubmit}
+            >
+              <CheckCircle className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+              Submit
+            </button>
+          </div>
+          <CodeEditor onChange={handleEditorChange} />
+
+          <CodeConsole />
+
+          <AlertDialog
+            open={isErrorSubmitOpen}
+            onOpenChange={setIsErrorSubmitOpen}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Incorrect Submission</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Your output did not match the expected output. Please try
+                  again.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      ) : (
+        <div className="flex flex-col justify-center items-center h-full">
+          <div className="text-2xl font-bold text-center">
+            Welcome to your interview!
+          </div>
+          <div className="text-center">
+            <button
+              type="button"
+              className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              onClick={() => handlePlayAudio(currentInterviewPrompt)}
+            >
+              <CheckCircle className="-ml-0.5 h-5 w-5" aria-hidden="true" />
+              {aiInterviewerState}
+            </button>
+          </div>
+        </div>
       )}
-      <div className="p-3 mr-auto flex flex-row justify-between items-center w-full">
-        <button
-          type="button"
-          className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={handleCompile}
-        >
-          <RocketLaunchIcon className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-          Compile Code
-        </button>
-
-        <button
-          type="button"
-          className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-          onClick={handleSubmit}
-        >
-          <CheckCircle className="-ml-0.5 h-5 w-5" aria-hidden="true" />
-          Submit
-        </button>
-      </div>
-      <CodeEditor onChange={handleEditorChange} />
-
-      <CodeConsole />
-
-      <AlertDialog open={isErrorSubmitOpen} onOpenChange={setIsErrorSubmitOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Incorrect Submission</AlertDialogTitle>
-            <AlertDialogDescription>
-              Your output did not match the expected output. Please try again.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useGlobalState } from "@/stores/globalState";
 import { usePriorStore } from "@/stores/priorStore";
 import { CheckCircleIcon } from "lucide-react";
 
@@ -289,8 +290,11 @@ const PriorDialog = () => {
 
       setGithubCommits(combinedDataWithForcast);
       setGithubDailyCommits(dayData);
-      console.log(newData);
-      console.log(githubCommits);
+      // console.log(newData);
+      // console.log(githubCommits);
+
+      setHasAddedPrior(true);
+      setOpenEyeTracking(true);
     }
 
     console.log(fileContent);
@@ -327,8 +331,10 @@ const PriorDialog = () => {
     return combinedData;
   };
 
+  const {hasAddedPrior, setHasAddedPrior, setOpenEyeTracking} = useGlobalState();
+
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setHasAddedPrior(true)}  open={!hasAddedPrior}>
       <DialogTrigger>
         <button className="ml-6 inline-flex items-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
           Reset Priors

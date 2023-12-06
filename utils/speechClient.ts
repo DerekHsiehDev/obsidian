@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { BASE_URL } from "@/lib/constants";
 import axios from "axios";
@@ -9,7 +9,8 @@ declare global {
   }
 }
 
-const AudioContext: typeof window.AudioContext = window.AudioContext || window.webkitAudioContext;
+const AudioContext: typeof window.AudioContext =
+  window.AudioContext || window.webkitAudioContext;
 const globalAudioContext = new AudioContext();
 
 const speechToText = async (text: string) => {
@@ -24,7 +25,11 @@ const speechToText = async (text: string) => {
     const source = globalAudioContext.createBufferSource();
     source.buffer = buffer;
     source.connect(globalAudioContext.destination);
-    source.start(0);
+    return new Promise((resolve, reject) => {
+      source.onended = () => resolve("finished");
+      source.onerror = (error) => reject(error);
+      source.start(0);
+    });
   } catch (error) {
     console.error(error);
   }
