@@ -28,10 +28,9 @@ const StatsContent = () => {
         <div className="flex flex-col overflow-auto">
           <div className="font-bold">GitHub Stats</div>
           <div className="w-full">
-            <StatsGraphView data={githubCommits} />
+            <StatsGraphView combinedData={githubCommits} />
           </div>
           <div className="w-full flex justify-center">
-            <ContributionChart data={githubDailyCommits} />
             <Barchart data={medianMeanVariance} />
           </div>
         </div>

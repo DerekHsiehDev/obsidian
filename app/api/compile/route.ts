@@ -18,23 +18,23 @@ export async function POST(request: NextRequest) {
     let correctCode = `interface Geo {
       lat: string;
       lng: string;
-  }
-  
-  interface Address {
+    }
+    
+    interface Address {
       street: string;
       suite: string;
       city: string;
       zipcode: string;
       geo: Geo;
-  }
-  
-  interface Company {
+    }
+    
+    interface Company {
       name: string;
       catchPhrase: string;
       bs: string;
-  }
-  
-  interface User {
+    }
+    
+    interface User {
       name: string;
       username: string;
       email: string;
@@ -42,17 +42,17 @@ export async function POST(request: NextRequest) {
       phone: string;
       website: string;
       company: Company;
-  }
-  
-  class UserApi {
+    }
+    
+    class UserApi {
       private endpoint: string;
       private users: User[];
-  
+    
       constructor(endpoint: string) {
           this.endpoint = endpoint;
           this.users = [];
       }
-  
+    
       async fetchUsers(): Promise<void> {
           try {
               const response = await fetch(this.endpoint);
@@ -65,20 +65,20 @@ export async function POST(request: NextRequest) {
               console.error('Error fetching users:', error);
           }
       }
-  
+    
       async performRequests() {
           for (let i = 0; i < 3; i++) {
               await this.fetchUsers();
           }
           console.log(this.users);
       }
-  } const userApi = new UserApi('https://interview-api-pi.vercel.app/api/users');
-  userApi.performRequests();`;
+    } const userApi = new UserApi('https://interview-api-pi.vercel.app/api/users');
+    userApi.performRequests();`;
 
     // check if interview.vertix.dev/api/users || https://interview-api-pi.vercel.app/api/users exists and replace append to it ?query={randomIndex}
 
     const randomIndex = Math.floor(Math.random() * 10);
-    console.log(randomIndex)
+    console.log(randomIndex);
 
     // Define the URLs to be checked
     const urls = [

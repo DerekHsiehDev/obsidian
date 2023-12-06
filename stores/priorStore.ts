@@ -22,8 +22,8 @@ export const usePriorStore = create<PriorState>((set) => ({
   setResume: (newResume: string) => set(() => ({ resume: newResume })),
   
   githubCommits: [
-    ["Day", "Commits"],
-    [0, 0],
+    ["Day", "Forcasted",  "Commits"],
+    [0, 0, 0],
   ],
   setGithubCommits: (newCommits: any) =>
     set(() => ({ githubCommits: newCommits })),

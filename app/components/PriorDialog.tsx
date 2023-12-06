@@ -17,7 +17,109 @@ interface ContributionDay {
   date: string;
 }
 
+type ContributionDay = {
+  contributionCount: number;
+  date: string;
+};
 
+type Week = {
+  contributionDays: ContributionDay[];
+};
+
+type Dataset = {
+  totalContributions: number;
+  weeks: Week[];
+};
+
+function calculateError(
+  actual: Dataset,
+  forecast: { [key: string]: number }
+): number {
+  let actualCounts: { [key: string]: number } = {
+    Sunday: 0,
+    Monday: 0,
+    Tuesday: 0,
+    Wednesday: 0,
+    Thursday: 0,
+    Friday: 0,
+    Saturday: 0,
+  };
+
+  actual.weeks.forEach((week) => {
+    week.contributionDays.forEach((day) => {
+      let date = new Date(day.date);
+      let dayOfWeek = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ][date.getDay()];
+      actualCounts[dayOfWeek] += day.contributionCount;
+    });
+  });
+
+  let error = 0;
+  for (let day in actualCounts) {
+    error += Math.abs(actualCounts[day] - forecast[day]);
+  }
+
+  return error / 7; // average error per day
+}
+
+function calculateProbability(dataset: Dataset): { [key: string]: number } {
+  let contributionsPerDay: { [key: string]: number[] } = {
+    Sunday: [],
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+  };
+
+  dataset.weeks.forEach((week) => {
+    week.contributionDays.forEach((day) => {
+      let date = new Date(day.date);
+      let dayOfWeek = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ][date.getDay()];
+      contributionsPerDay[dayOfWeek].push(day.contributionCount);
+    });
+  });
+
+  let totalContributions = dataset.totalContributions;
+  let probabilityPerDay: { [key: string]: number } = {};
+
+  for (let day in contributionsPerDay) {
+    let totalContributionsOnDay =
+      contributionsPerDay[day].reduce((a, b) => a + b, 0) + 1; // add one to each count
+    probabilityPerDay[day] = totalContributionsOnDay / (totalContributions + 7); // add 7 to the total count (one for each day of the week)
+  }
+
+  return probabilityPerDay;
+}
+
+function forecastCommitActivity(
+  probabilities: { [key: string]: number },
+  daysAhead: number
+): { [key: string]: number } {
+  let forecast: { [key: string]: number } = {};
+
+  for (let day in probabilities) {
+    forecast[day] = probabilities[day] * daysAhead;
+  }
+
+  return forecast;
+}
 
 const transformData = (data: any): (string | number)[][] => {
   const transformedData = [["Day", "Commits"]];
@@ -46,72 +148,76 @@ const PriorDialog = () => {
   const [username, setUsername] = useState<string>("");
   const [fileContent, setFileContent] = useState<string>("");
 
-  const { githubCommits, setGithubCommits, medianMeanVariance, setMedianMeanVariance, setGithubDailyCommits } =
-    usePriorStore();
+  const {
+    githubCommits,
+    setGithubCommits,
+    medianMeanVariance,
+    setMedianMeanVariance,
+    setGithubDailyCommits,
+  } = usePriorStore();
 
-    function dayOfWeekEffect(dataset: any): { [key: string]: number } {
-      let contributionsPerDay: { [key: string]: number[] } = {
-        Sunday: [],
-        Monday: [],
-        Tuesday: [],
-        Wednesday: [],
-        Thursday: [],
-        Friday: [],
-        Saturday: [],
-      };
-    
-      dataset.weeks.forEach((week) => {
-        week.contributionDays.forEach((day) => {
-          let date = new Date(day.date);
-          let dayOfWeek = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-          ][date.getDay()];
-          contributionsPerDay[dayOfWeek].push(day.contributionCount);
-        });
+  function dayOfWeekEffect(dataset: any): { [key: string]: number } {
+    let contributionsPerDay: { [key: string]: number[] } = {
+      Sunday: [],
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+    };
+
+    dataset.weeks.forEach((week) => {
+      week.contributionDays.forEach((day) => {
+        let date = new Date(day.date);
+        let dayOfWeek = [
+          "Sunday",
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ][date.getDay()];
+        contributionsPerDay[dayOfWeek].push(day.contributionCount);
       });
-    
-      let averageContributionsPerDay: { [key: string]: number } = {};
-      for (let day in contributionsPerDay) {
-        let average =
-          contributionsPerDay[day].reduce((a, b) => a + b, 0) /
-          contributionsPerDay[day].length;
-        averageContributionsPerDay[day] = average;
-      }
-    
-      let statsContributionsPerDay: {
-        [key: string]: {
-          average: number;
-          mean: number;
-          median: number;
-          variance: number;
-        };
-      } = {};
-      for (let day in contributionsPerDay) {
-        let values = contributionsPerDay[day];
-        let mean = values.reduce((a, b) => a + b, 0) / values.length;
-    
-        values.sort((a, b) => a - b);
-        let median =
-          (values[(values.length - 1) >> 1] + values[values.length >> 1]) / 2;
-    
-        let variance =
-          values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
-    
-        statsContributionsPerDay[day] = { average: mean, mean, median, variance };
-      }
-    
-      console.log(statsContributionsPerDay)
-      setMedianMeanVariance(statsContributionsPerDay);
-      
-    
-      return averageContributionsPerDay;
+    });
+
+    let averageContributionsPerDay: { [key: string]: number } = {};
+    for (let day in contributionsPerDay) {
+      let average =
+        contributionsPerDay[day].reduce((a, b) => a + b, 0) /
+        contributionsPerDay[day].length;
+      averageContributionsPerDay[day] = average;
     }
+
+    let statsContributionsPerDay: {
+      [key: string]: {
+        average: number;
+        mean: number;
+        median: number;
+        variance: number;
+      };
+    } = {};
+    for (let day in contributionsPerDay) {
+      let values = contributionsPerDay[day];
+      let mean = values.reduce((a, b) => a + b, 0) / values.length;
+
+      values.sort((a, b) => a - b);
+      let median =
+        (values[(values.length - 1) >> 1] + values[values.length >> 1]) / 2;
+
+      let variance =
+        values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+
+      statsContributionsPerDay[day] = { average: mean, mean, median, variance };
+    }
+
+    console.log(statsContributionsPerDay);
+    setMedianMeanVariance(statsContributionsPerDay);
+
+    return averageContributionsPerDay;
+  }
 
   const handleSubmit = async () => {
     const response = await fetch(`/api/github?userName=${username.trim()}`, {
@@ -129,6 +235,28 @@ const PriorDialog = () => {
         contributionRes.data.user.contributionsCollection.contributionCalendar
       );
 
+      const dataset =
+        contributionRes.data.user.contributionsCollection.contributionCalendar;
+
+      // get 75% of dataset
+      const trainingDataset = {
+        totalContributions: dataset.totalContributions ,
+        weeks: dataset.weeks.slice(
+        0,
+        Math.floor(dataset.weeks.length * 0.90)
+      )};
+
+      const testingDataset = {
+        totalContributions: dataset.totalContributions,
+        weeks: dataset.weeks.slice(
+        Math.floor(dataset.weeks.length * 0.90),
+        dataset.length
+      )};
+
+      const probabilities = calculateProbability(trainingDataset);
+
+      console.log("probabilities", probabilities);
+
       const newData = transformData(
         contributionRes.data.user.contributionsCollection.contributionCalendar
       );
@@ -137,13 +265,66 @@ const PriorDialog = () => {
         contributionRes.data.user.contributionsCollection.contributionCalendar
       );
 
-      setGithubCommits(newData);
+      // Forecast commit activity for the next 7 days
+      const forecast = forecastCommitActivity(probabilities, 7);
+
+
+      const error = calculateError(testingDataset, forecast);
+      console.log("error", error)
+      console.log("forecast", forecast);
+
+      // Prepare the forecasted data for the chart
+      const forecastedData = Object.entries(forecast).map(([day, count]) => [
+        day,
+        undefined,
+        count,
+      ]);
+
+      const combinedDataWithForcast = transformAndCombineData(
+        newData,
+        forecastedData
+      );
+
+      console.log("combined data", combinedDataWithForcast);
+
+      setGithubCommits(combinedDataWithForcast);
       setGithubDailyCommits(dayData);
       console.log(newData);
       console.log(githubCommits);
     }
 
     console.log(fileContent);
+  };
+
+  const transformAndCombineData = (actualData, forecastData) => {
+    // Convert actual data dates to Date objects and ensure commit counts are numbers
+    const actualDataWithDates = actualData.map((entry) => {
+      return [new Date(entry[0]), Number(entry[1]), null];
+    });
+
+    // Sort the data by date
+    actualDataWithDates.sort((a, b) => a[0] - b[0]);
+
+    // Map forecast data to weekdays and ensure forecast counts are numbers
+    const forecastMap = forecastData.reduce((map, entry) => {
+      map[entry[0]] = entry[2] !== null ? Number(entry[2]) : null;
+      return map;
+    }, {});
+
+    // Combine actual data with forecast data
+    const combinedData = actualDataWithDates.map((entry) => {
+      const dayOfWeek = entry[0].toLocaleDateString("en-US", {
+        weekday: "long",
+      });
+      entry[2] =
+        forecastMap[dayOfWeek] !== undefined ? forecastMap[dayOfWeek] : null;
+      return entry;
+    });
+
+    // Add header row
+    combinedData.unshift(["Date", "Actual Commits", "Forecasted Commits"]);
+
+    return combinedData;
   };
 
   return (

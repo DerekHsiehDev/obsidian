@@ -23,6 +23,13 @@ import {
 } from "@/stores/compilationStore";
 import { useStore } from "zustand";
 import { CheckCircle } from "lucide-react";
+import naiveBayes from "@/utils/bagOfWords";
+import {
+  codeTyping,
+  correctCode,
+  interfaceTyping,
+  typeTyping,
+} from "@/lib/correctCode";
 
 const data = {
   text: "We'll start with a brief overview of your experience and skills, and then proceed to some technical questions related to your field. Please feel free to ask any questions or seek clarifications at any point.",
@@ -85,11 +92,29 @@ const ChatContent = () => {
   const handleSubmit = () => {
     if (output !== correctOutput || !correctOutput) {
       setIsErrorSubmitOpen(true);
-      return
-    } 
+      return;
+    }
+
+    let minScore = -2;
+
+    console.log(currentCode);
+    console.log(correctCode[0]);
+
+    for (let testCode of correctCode) {
+      // first check with normal typescript Type typing syntax
+      // console.log(naiveBayes(typeTyping + "\n" + testCode, currentCode));
+
+      minScore = Math.min(minScore, naiveBayes(codeTyping + "\n" + testCode, currentCode))
+
+      // then check with typescript interface typing syntax
+      // console.log(naiveBayes(interfaceTyping + "\n" + testCode, currentCode));
+      minScore = Math.min(minScore, naiveBayes(interfaceTyping + "\n" + testCode, currentCode));
+    }
+
+    console.log(minScore);
 
     // success
-    alert("Success! You can now move on to the next question.")
+    alert("Success! You can now move on to the next question.");
   };
 
   const handleCompile = async () => {
