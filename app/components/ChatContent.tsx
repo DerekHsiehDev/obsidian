@@ -25,7 +25,6 @@ import { useStore } from "zustand";
 import { CheckCircle } from "lucide-react";
 import naiveBayes from "@/utils/bagOfWords";
 import {
-  codeTyping,
   correctCode,
   interfaceTyping,
   typeTyping,
@@ -56,7 +55,6 @@ interface Response {
 const prompt = `
 <ul class="list-disc list-inside">
   <li class="mb-1">Use TypeScript to create a class that interacts with the API endpoint <b>https://interview-api-pi.vercel.app/api/users</b> through a <b>GET</b> request using <b>fetch</b>, NOT axios.</li>
-  <li class="mb-1">Your class should include properly defined types for the API response and a method to perform the request.</li>
   <li class="mb-1">You need to execute this request three times, storing the results in an array within the class.</li>
   <li class="mb-1">After all requests are completed, output the array contents using <b>console.log</b>.</li>
   <li class="mb-1">Make sure to handle potential errors appropriately during the request execution and output them using <b>console.error</b>.</li>
@@ -95,7 +93,7 @@ const ChatContent = () => {
       return;
     }
 
-    let minScore = -2;
+    let maxScore = -2;
 
     console.log(currentCode);
     console.log(correctCode[0]);
@@ -104,14 +102,19 @@ const ChatContent = () => {
       // first check with normal typescript Type typing syntax
       // console.log(naiveBayes(typeTyping + "\n" + testCode, currentCode));
 
-      minScore = Math.min(minScore, naiveBayes(codeTyping + "\n" + testCode, currentCode))
+      maxScore = Math.max(
+        maxScore,
+        naiveBayes(testCode, currentCode)
+      );
+
+      // console.log(naiveBayes(testCode, currentCode))
 
       // then check with typescript interface typing syntax
       // console.log(naiveBayes(interfaceTyping + "\n" + testCode, currentCode));
-      minScore = Math.min(minScore, naiveBayes(interfaceTyping + "\n" + testCode, currentCode));
+
     }
 
-    console.log(minScore);
+    console.log("max score", maxScore);
 
     // success
     alert("Success! You can now move on to the next question.");

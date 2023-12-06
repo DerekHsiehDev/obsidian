@@ -125,4 +125,29 @@ class UserApi {
         this.results.push(...data);
     }
 }`,
+  `class ApiClient {
+    constructor(endpoint: string) {
+        this.endpoint = endpoint
+    }
+
+    endpoint: string = ""
+    store: any[] = []
+
+
+    async fetchMultiple(){
+        for (let i = 0; i < 3; i++) {
+            const response = await fetch(this.endpoint)
+
+            const data = await response.json()
+
+            this.store.push(data)
+        }
+
+        console.log(this.store)
+    }
+}
+
+const apiClient = new ApiClient("https://interview-api-pi.vercel.app/api/users")
+
+apiClient.fetchMultiple()`,
 ];
