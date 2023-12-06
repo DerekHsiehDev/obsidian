@@ -13,6 +13,10 @@ export default function Home() {
         <div className="w-1/2">
           <ChatContent />
         </div>
+
+        <div className="border-r border-gray-300 mr-3"></div> {/* This is the divider */}
+
+        
         <div className="w-1/2 flexh h-full flex-col">
           <div className="flex flex-1 h-1/6 m-4 mr-3 rounded-md ml-auto items-center justify-between">
             <ClockTimer/>

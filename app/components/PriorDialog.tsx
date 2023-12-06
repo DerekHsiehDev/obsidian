@@ -6,14 +6,112 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { usePriorStore } from "@/stores/priorStore";
 import { CheckCircleIcon } from "lucide-react";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
+interface ContributionDay {
+  contributionCount: number;
+  date: string;
+}
+
+
+
+const transformData = (data: any): (string | number)[][] => {
+  const transformedData = [["Day", "Commits"]];
+
+  for (const week in data.weeks) {
+    // contributions in week
+    for (const day of data.weeks[week].contributionDays) {
+      // temp element in array
+      const date = new Date(day.date);
+      const formattedDate = `${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}/${String(date.getDate()).padStart(2, "0")}`;
+
+      const tempElement = [formattedDate, day.contributionCount];
+      transformedData.push(tempElement);
+    }
+  }
+
+  console.log(transformedData);
+
+  return transformedData;
+};
+
 const PriorDialog = () => {
   const [username, setUsername] = useState<string>("");
   const [fileContent, setFileContent] = useState<string>("");
+
+  const { githubCommits, setGithubCommits, medianMeanVariance, setMedianMeanVariance, setGithubDailyCommits } =
+    usePriorStore();
+
+    function dayOfWeekEffect(dataset: any): { [key: string]: number } {
+      let contributionsPerDay: { [key: string]: number[] } = {
+        Sunday: [],
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: [],
+      };
+    
+      dataset.weeks.forEach((week) => {
+        week.contributionDays.forEach((day) => {
+          let date = new Date(day.date);
+          let dayOfWeek = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ][date.getDay()];
+          contributionsPerDay[dayOfWeek].push(day.contributionCount);
+        });
+      });
+    
+      let averageContributionsPerDay: { [key: string]: number } = {};
+      for (let day in contributionsPerDay) {
+        let average =
+          contributionsPerDay[day].reduce((a, b) => a + b, 0) /
+          contributionsPerDay[day].length;
+        averageContributionsPerDay[day] = average;
+      }
+    
+      let statsContributionsPerDay: {
+        [key: string]: {
+          average: number;
+          mean: number;
+          median: number;
+          variance: number;
+        };
+      } = {};
+      for (let day in contributionsPerDay) {
+        let values = contributionsPerDay[day];
+        let mean = values.reduce((a, b) => a + b, 0) / values.length;
+    
+        values.sort((a, b) => a - b);
+        let median =
+          (values[(values.length - 1) >> 1] + values[values.length >> 1]) / 2;
+    
+        let variance =
+          values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+    
+        statsContributionsPerDay[day] = { average: mean, mean, median, variance };
+      }
+    
+      console.log(statsContributionsPerDay)
+      setMedianMeanVariance(statsContributionsPerDay);
+      
+    
+      return averageContributionsPerDay;
+    }
 
   const handleSubmit = async () => {
     const response = await fetch(`/api/github?userName=${username.trim()}`, {
@@ -27,7 +125,22 @@ const PriorDialog = () => {
       console.error("HTTP error", response.status);
     } else {
       const contributionRes = await response.json();
-      console.log(contributionRes.data.user.contributionsCollection);
+      console.log(
+        contributionRes.data.user.contributionsCollection.contributionCalendar
+      );
+
+      const newData = transformData(
+        contributionRes.data.user.contributionsCollection.contributionCalendar
+      );
+
+      const dayData = dayOfWeekEffect(
+        contributionRes.data.user.contributionsCollection.contributionCalendar
+      );
+
+      setGithubCommits(newData);
+      setGithubDailyCommits(dayData);
+      console.log(newData);
+      console.log(githubCommits);
     }
 
     console.log(fileContent);

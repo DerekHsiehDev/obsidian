@@ -4,6 +4,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowUpCircleIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import StatsGraphView from "./StatsGraphView";
+import { usePriorStore } from "@/stores/priorStore";
+import ContributionChart from "./ContributionChart";
+import Barchart from "./MeanChart";
 
 enum Tab {
   stats = "stats",
@@ -12,6 +15,8 @@ enum Tab {
 }
 
 const StatsContent = () => {
+  const { githubCommits, githubDailyCommits, medianMeanVariance } =
+    usePriorStore();
   return (
     <Tabs defaultValue={Tab.stats} className=" pt-3 w-full">
       <TabsList>
@@ -20,10 +25,22 @@ const StatsContent = () => {
         <TabsTrigger value={Tab.gpt}>GPT</TabsTrigger>
       </TabsList>
       <TabsContent value={Tab.stats}>
-        <StatsGraphView/>
+        <div className="flex flex-col overflow-auto">
+          <div className="font-bold">GitHub Stats</div>
+          <div className="w-full">
+            <StatsGraphView data={githubCommits} />
+          </div>
+          <div className="w-full flex justify-center">
+            <ContributionChart data={githubDailyCommits} />
+            <Barchart data={medianMeanVariance} />
+          </div>
+        </div>
       </TabsContent>
-      <TabsContent value={Tab.web} className="w-full"> 
-      <iframe src="https://www.bing.com" style={{width: '100%', height: '100vh'}}></iframe>
+      <TabsContent value={Tab.web} className="w-full">
+        <iframe
+          src="https://www.bing.com"
+          style={{ width: "100%", height: "100vh" }}
+        ></iframe>
       </TabsContent>
       <TabsContent value={Tab.gpt}>
         <IMessageUI />
@@ -45,7 +62,6 @@ function IMessageUI() {
   const [isGPTTyping, setIsGPTTyping] = useState<boolean>(false);
 
   const handleGPT = (messages: Message[]) => {
-
     // remove first message
     fetch("/api/gpt", {
       method: "POST",
@@ -53,12 +69,12 @@ function IMessageUI() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: messages.slice(1)
+        messages: messages.slice(1),
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data.text)
+        console.log(data.text);
         const newMessage: Message = {
           content: data.text,
           role: "assistant",
@@ -89,11 +105,9 @@ function IMessageUI() {
       handleGPT(updatedMessages);
       return updatedMessages;
     });
-
   };
 
   function formatMessageContent(content: string) {
-
     return (
       <>
         {content.split("```").map((part, index) =>
@@ -105,7 +119,7 @@ function IMessageUI() {
               className="text-sm mt-3 text-green-400 font-mono bg-gray-800 p-4 rounded"
             >
               {/* cuts off first line which is programming language */}
-              <code>{part.split('\n').slice(1).join('\n')}</code>
+              <code>{part.split("\n").slice(1).join("\n")}</code>
             </pre>
           )
         )}
@@ -115,55 +129,59 @@ function IMessageUI() {
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      content: "I'm here to help you remember syntax, and find the right resources. Not to give you the answers!",
+      content:
+        "I'm here to help you remember syntax, and find the right resources. Not to give you the answers!",
       role: "assistant",
     },
   ]);
 
   return (
     <div className="w-full rounded-lg overflow-hidden mr-4">
-    <div className="bg-white p-4 pr-3 flex-grow overflow-auto" style={{ maxHeight: '90vh' }}> 
-      <div className="space-y-2">
-        <div className="mb-7">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${
-                message.role === "user" ? "flex justify-end" : ""
-              }`}
-            >
+      <div
+        className="bg-white p-4 pr-3 flex-grow overflow-auto"
+        style={{ maxHeight: "90vh" }}
+      >
+        <div className="space-y-2">
+          <div className="mb-7">
+            {messages.map((message, index) => (
               <div
+                key={index}
                 className={`${
-                  message.role === "user" ? "bg-blue-500" : "bg-gray-100"
-                } p-2 rounded-lg`}
+                  message.role === "user" ? "flex justify-end" : ""
+                } mb-3`}
               >
-                <p
-                  className={`text-sm ${
-                    message.role === "user" ? "text-white" : "text-gray-800"
-                  }`}
+                <div
+                  className={`${
+                    message.role === "user" ? "bg-blue-500" : "bg-gray-100"
+                  } p-2 rounded-lg inline-block`}
                 >
-                  {formatMessageContent(message.content)}
-                </p>
+                  <p
+                    className={`text-sm ${
+                      message.role === "user" ? "text-white" : "text-gray-800"
+                    }`}
+                  >
+                    {formatMessageContent(message.content)}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-          {isGPTTyping && (
-            <div className="flex justify-start">
-              <div className="bg-gray-200 p-2 pt-3 pb-3 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="mx-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-75"></div>
-                  </div>
-                  <div className="mx-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-150"></div>
-                  </div>
-                  <div className="mx-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-225"></div>
+            ))}
+            {isGPTTyping && (
+              <div className="flex justify-start">
+                <div className="bg-gray-200 p-2 pt-3 pb-3 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="mx-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-75"></div>
+                    </div>
+                    <div className="mx-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-150"></div>
+                    </div>
+                    <div className="mx-2">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-225"></div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>

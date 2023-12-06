@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
     // check if interview.vertix.dev/api/users || https://interview-api-pi.vercel.app/api/users exists and replace append to it ?query={randomIndex}
 
     const randomIndex = Math.floor(Math.random() * 10);
+    console.log(randomIndex)
 
     // Define the URLs to be checked
     const urls = [
@@ -90,13 +91,13 @@ export async function POST(request: NextRequest) {
       const regex = new RegExp(url, "g");
 
       // Check if the URL exists in the code
-      if (regex.test(code)) {
+      if (regex.test(code) || regex.test(correctCode)) {
         code = code.replace(regex, `${url}?index=${randomIndex}`);
         correctCode = correctCode.replace(regex, `${url}?index=${randomIndex}`);
       }
     }
 
-    console.log(code);
+    console.log(correctCode);
 
     // replace console.log with console.log(JSON.stringify(...))
     const codeWithJSONStringify = code.replace(
