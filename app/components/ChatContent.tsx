@@ -180,7 +180,7 @@ const ChatContent = () => {
       // first check with normal typescript Type typing syntax
       // console.log(naiveBayes(typeTyping + "\n" + testCode, currentCode));
 
-      maxScore = Math.max(maxScore, naiveBayes(testCode, currentCode, timeSpendOnChatAndTools));
+      maxScore = Math.max(maxScore, naiveBayes(testCode, currentCode, timeSpentOnChatAndTools));
 
       // console.log(naiveBayes(testCode, currentCode))
 

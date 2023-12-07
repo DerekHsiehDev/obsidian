@@ -18,8 +18,11 @@ function VideoContent() {
 
   const { setCurrentEyeTrackingState } = useDataStore();
 
-  const { incrementTimeSpendOnChatAndTools, isCodeProblemOpen } =
-    useGlobalState();
+  const {
+    incrementTimeSpendOnChatAndTools,
+    isCodeProblemOpen,
+    timeSpentOnChatAndTools,
+  } = useGlobalState();
 
   const size = useWindowSize();
 
@@ -43,17 +46,21 @@ function VideoContent() {
           // Convert elapsedTime from milliseconds to seconds for better readability
           const elapsedTimeInSeconds = (elapsedTime / 1000).toFixed(2);
 
-          console.log(data.x, size.width);
-          console.log(data.y, size.height);
-
-          if (isCodeProblemOpen) {
-            if (data.x < size.width / 2) {
-              // increment chat
+          if (data.x < size.width / 2) {
+            // increment chat
+            if (isCodeProblemOpen) {
               incrementTimeSpendOnChatAndTools("chat");
-            } else {
-              // increment tools
-              incrementTimeSpendOnChatAndTools("tools");
+              console.log();
+              timeSpentOnChatAndTools.chat += 1;
             }
+
+            setCurrentEyeTrackingState("chat");
+          } else {
+            if (isCodeProblemOpen) {
+              incrementTimeSpendOnChatAndTools("tools");
+              timeSpentOnChatAndTools.chat += 1;
+            }
+            setCurrentEyeTrackingState("stats");
           }
 
           window.webgazer.pause();

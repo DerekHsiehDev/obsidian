@@ -128,7 +128,11 @@ export default function naiveBayes(modelSolution: string, studentSolution: strin
   // Convert the normalized score into a similarity probability using sigmoid
   const similarity = sigmoid(score);
 
-  const timeRatio = timeSpentOnChatAndTools.chat / (timeSpentOnChatAndTools.tools + 1); // Add 1 to avoid division by zero
+  const timeRatio = (timeSpentOnChatAndTools.chat + 1) / (timeSpentOnChatAndTools.tools + 1); // Add 1 to avoid division by zero
+
+  console.log(timeSpentOnChatAndTools)
+
+  console.log(timeRatio)
 
   const adjustedSimilarity = similarity * timeRatio;
 
@@ -138,7 +142,7 @@ export default function naiveBayes(modelSolution: string, studentSolution: strin
 
 
   // return similarity * 2;
-  return adjustedSimilarity
+  return adjustedSimilarity * 2
 }
 
 
