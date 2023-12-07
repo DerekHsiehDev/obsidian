@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useDataStore } from "@/stores/dataStore";
 import VideoWebcam from "./Webcam";
+import { useGlobalState } from "@/stores/globalState";
 
 declare global {
   interface Window {
@@ -16,6 +17,9 @@ function VideoContent() {
   const [intervalMs, setIntervalMs] = useState(1000); // Desired interval for the gaze listener in milliseconds.
 
   const { setCurrentEyeTrackingState } = useDataStore();
+
+  const { incrementTimeSpendOnChatAndTools, isCodeProblemOpen } =
+    useGlobalState();
 
   const size = useWindowSize();
 
@@ -39,17 +43,17 @@ function VideoContent() {
           // Convert elapsedTime from milliseconds to seconds for better readability
           const elapsedTimeInSeconds = (elapsedTime / 1000).toFixed(2);
 
-          console.log(data.x, size.width)
-          console.log(data.y, size.height)
+          console.log(data.x, size.width);
+          console.log(data.y, size.height);
 
-          if (data.x < size.width / 2) {
-
-            
-            console.log("chat");
-            setCurrentEyeTrackingState("chat");
-          } else {
-            console.log('stats')
-            setCurrentEyeTrackingState("stats");
+          if (isCodeProblemOpen) {
+            if (data.x < size.width / 2) {
+              // increment chat
+              incrementTimeSpendOnChatAndTools("chat");
+            } else {
+              // increment tools
+              incrementTimeSpendOnChatAndTools("tools");
+            }
           }
 
           window.webgazer.pause();
@@ -67,7 +71,7 @@ function VideoContent() {
     };
 
     // UNCOMMENT THIS OUT
-    // loadWebgazer();
+    loadWebgazer();
   }, [showPoints, intervalMs]); // Only re-run the effect if showPoints or intervalMs changes
 
   const togglePoints = () => {
@@ -82,9 +86,7 @@ function VideoContent() {
     setShowVideo((prev) => !prev);
   };
 
-  return (
-    <VideoWebcam/>
-  )
+  return <VideoWebcam />;
 }
 
 export default VideoContent;

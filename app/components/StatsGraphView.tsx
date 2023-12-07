@@ -32,7 +32,7 @@ export const options = {
 
 const StatsGraphView = ({ combinedData }: any) => {
   // Assuming combinedData is properly structured as [Date, Actual Commits, Forecasted Commits]
-  console.log(combinedData);
+  console.log(combinedData)
   return (
     <div className="w-full rounded-lg overflow-hidden mr-4">
       <Chart

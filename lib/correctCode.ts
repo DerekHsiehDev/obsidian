@@ -135,15 +135,20 @@ class UserApi {
 
 
     async fetchMultiple(){
-        for (let i = 0; i < 3; i++) {
-            const response = await fetch(this.endpoint)
-
-            const data = await response.json()
-
-            this.store.push(data)
+        try {
+            for (let i = 0; i < 3; i++) {
+                const response = await fetch(this.endpoint)
+    
+                const data = await response.json()
+    
+                this.store.push(data)
+            }
+    
+            console.log(this.store)
+        } catch (error) {
+            console.error(error)
         }
-
-        console.log(this.store)
+     
     }
 }
 

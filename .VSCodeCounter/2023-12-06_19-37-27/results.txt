@@ -1,0 +1,114 @@
+Date : 2023-12-06 19:37:27
+Directory : /Users/derekhsieh/vertix/obsidian
+Total : 61 files,  9762 codes, 369 comments, 621 blanks, all 10752 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          3 |      6,662 |          0 |          2 |      6,664 |
+| TypeScript JSX     |         23 |      1,803 |         84 |        287 |      2,174 |
+| TypeScript         |         26 |      1,082 |        271 |        286 |      1,639 |
+| JavaScript         |          3 |         96 |         11 |          8 |        115 |
+| CSS                |          1 |         65 |          1 |         22 |         88 |
+| JSON with Comments |          2 |         29 |          2 |          2 |         33 |
+| Markdown           |          1 |         23 |          0 |         14 |         37 |
+| XML                |          2 |          2 |          0 |          0 |          2 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                   | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                      |         61 |      9,762 |        369 |        621 |     10,752 |
+| . (Files)                                                              |         10 |      6,831 |         13 |         28 |      6,872 |
+| app                                                                    |         26 |      1,980 |        115 |        337 |      2,432 |
+| app (Files)                                                            |          3 |        112 |          1 |         30 |        143 |
+| app/api                                                                |          9 |        577 |         31 |        102 |        710 |
+| app/api/compile                                                        |          1 |        146 |          8 |         29 |        183 |
+| app/api/github                                                         |          1 |         69 |          2 |          7 |         78 |
+| app/api/gpt                                                            |          2 |         53 |          1 |         12 |         66 |
+| app/api/gpt (Files)                                                    |          1 |         23 |          1 |          7 |         31 |
+| app/api/gpt/turbo                                                      |          1 |         30 |          0 |          5 |         35 |
+| app/api/pdf                                                            |          1 |         14 |          1 |          5 |         20 |
+| app/api/speech                                                         |          1 |         33 |          2 |         18 |         53 |
+| app/api/transcribe                                                     |          1 |         51 |         13 |          8 |         72 |
+| app/api/vision                                                         |          2 |        211 |          4 |         23 |        238 |
+| app/components                                                         |         14 |      1,291 |         83 |        205 |      1,579 |
+| components                                                             |          7 |        465 |          1 |         74 |        540 |
+| components (Files)                                                     |          2 |        107 |          1 |         23 |        131 |
+| components/ui                                                          |          5 |        358 |          0 |         51 |        409 |
+| hooks                                                                  |          1 |         20 |          0 |          6 |         26 |
+| lib                                                                    |          4 |        140 |          0 |         30 |        170 |
+| public                                                                 |          2 |          2 |          0 |          0 |          2 |
+| stores                                                                 |          5 |        106 |          1 |         37 |        144 |
+| utils                                                                  |          6 |        218 |        239 |        109 |        566 |
++------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                               | language           | code       | comment    | blank      | total      |
++------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /Users/derekhsieh/vertix/obsidian/.eslintrc.json                       | JSON with Comments |          3 |          0 |          1 |          4 |
+| /Users/derekhsieh/vertix/obsidian/README.md                            | Markdown           |         23 |          0 |         14 |         37 |
+| /Users/derekhsieh/vertix/obsidian/app/api/compile/route.ts             | TypeScript         |        146 |          8 |         29 |        183 |
+| /Users/derekhsieh/vertix/obsidian/app/api/github/route.ts              | TypeScript         |         69 |          2 |          7 |         78 |
+| /Users/derekhsieh/vertix/obsidian/app/api/gpt/route.ts                 | TypeScript         |         23 |          1 |          7 |         31 |
+| /Users/derekhsieh/vertix/obsidian/app/api/gpt/turbo/route.ts           | TypeScript         |         30 |          0 |          5 |         35 |
+| /Users/derekhsieh/vertix/obsidian/app/api/pdf/route.ts                 | TypeScript         |         14 |          1 |          5 |         20 |
+| /Users/derekhsieh/vertix/obsidian/app/api/speech/route.ts              | TypeScript         |         33 |          2 |         18 |         53 |
+| /Users/derekhsieh/vertix/obsidian/app/api/transcribe/route.ts          | TypeScript         |         51 |         13 |          8 |         72 |
+| /Users/derekhsieh/vertix/obsidian/app/api/vision/route.ts              | TypeScript         |        147 |          4 |         19 |        170 |
+| /Users/derekhsieh/vertix/obsidian/app/api/vision/vision.type.ts        | TypeScript         |         64 |          0 |          4 |         68 |
+| /Users/derekhsieh/vertix/obsidian/app/components/Button.tsx            | TypeScript JSX     |         21 |          0 |          4 |         25 |
+| /Users/derekhsieh/vertix/obsidian/app/components/ChatContent.tsx       | TypeScript JSX     |        249 |         11 |         39 |        299 |
+| /Users/derekhsieh/vertix/obsidian/app/components/ClockTimer.tsx        | TypeScript JSX     |         45 |          1 |          9 |         55 |
+| /Users/derekhsieh/vertix/obsidian/app/components/CodeConsole.tsx       | TypeScript JSX     |        101 |          2 |          8 |        111 |
+| /Users/derekhsieh/vertix/obsidian/app/components/CodeEditor.tsx        | TypeScript JSX     |         16 |          0 |          6 |         22 |
+| /Users/derekhsieh/vertix/obsidian/app/components/ContributionChart.tsx | TypeScript JSX     |         28 |         32 |          7 |         67 |
+| /Users/derekhsieh/vertix/obsidian/app/components/Logo.tsx              | TypeScript JSX     |         22 |          0 |          3 |         25 |
+| /Users/derekhsieh/vertix/obsidian/app/components/MeanChart.tsx         | TypeScript JSX     |         29 |          0 |          6 |         35 |
+| /Users/derekhsieh/vertix/obsidian/app/components/Navbar.tsx            | TypeScript JSX     |         81 |          2 |         11 |         94 |
+| /Users/derekhsieh/vertix/obsidian/app/components/PriorDialog.tsx       | TypeScript JSX     |        391 |         13 |         68 |        472 |
+| /Users/derekhsieh/vertix/obsidian/app/components/StatsContent.tsx      | TypeScript JSX     |        202 |          1 |         12 |        215 |
+| /Users/derekhsieh/vertix/obsidian/app/components/StatsGraphView.tsx    | TypeScript JSX     |         36 |         15 |          7 |         58 |
+| /Users/derekhsieh/vertix/obsidian/app/components/VideoContent.tsx      | TypeScript JSX     |         63 |          6 |         22 |         91 |
+| /Users/derekhsieh/vertix/obsidian/app/components/Webcam.tsx            | TypeScript JSX     |          7 |          0 |          3 |         10 |
+| /Users/derekhsieh/vertix/obsidian/app/globals.css                      | CSS                |         65 |          1 |         22 |         88 |
+| /Users/derekhsieh/vertix/obsidian/app/layout.tsx                       | TypeScript JSX     |         19 |          0 |          3 |         22 |
+| /Users/derekhsieh/vertix/obsidian/app/page.tsx                         | TypeScript JSX     |         28 |          0 |          5 |         33 |
+| /Users/derekhsieh/vertix/obsidian/components.json                      | JSON               |         16 |          0 |          0 |         16 |
+| /Users/derekhsieh/vertix/obsidian/components/EyeCalibration.tsx        | TypeScript JSX     |         89 |          1 |         18 |        108 |
+| /Users/derekhsieh/vertix/obsidian/components/Modal.tsx                 | TypeScript JSX     |         18 |          0 |          5 |         23 |
+| /Users/derekhsieh/vertix/obsidian/components/ui/alert-dialog.tsx       | TypeScript JSX     |        127 |          0 |         15 |        142 |
+| /Users/derekhsieh/vertix/obsidian/components/ui/button.tsx             | TypeScript JSX     |         51 |          0 |          6 |         57 |
+| /Users/derekhsieh/vertix/obsidian/components/ui/dialog.tsx             | TypeScript JSX     |        109 |          0 |         14 |        123 |
+| /Users/derekhsieh/vertix/obsidian/components/ui/tabs.tsx               | TypeScript JSX     |         48 |          0 |          8 |         56 |
+| /Users/derekhsieh/vertix/obsidian/components/ui/tooltip.tsx            | TypeScript JSX     |         23 |          0 |          8 |         31 |
+| /Users/derekhsieh/vertix/obsidian/hooks/useWindowSize.ts               | TypeScript         |         20 |          0 |          6 |         26 |
+| /Users/derekhsieh/vertix/obsidian/lib/OpenaiConfig.ts                  | TypeScript         |          5 |          0 |          3 |          8 |
+| /Users/derekhsieh/vertix/obsidian/lib/constants.ts                     | TypeScript         |          1 |          0 |          0 |          1 |
+| /Users/derekhsieh/vertix/obsidian/lib/correctCode.ts                   | TypeScript         |        129 |          0 |         25 |        154 |
+| /Users/derekhsieh/vertix/obsidian/lib/utils.ts                         | TypeScript         |          5 |          0 |          2 |          7 |
+| /Users/derekhsieh/vertix/obsidian/next.config.js                       | JavaScript         |         15 |         10 |          7 |         32 |
+| /Users/derekhsieh/vertix/obsidian/package-lock.json                    | JSON               |      6,587 |          0 |          1 |      6,588 |
+| /Users/derekhsieh/vertix/obsidian/package.json                         | JSON               |         59 |          0 |          1 |         60 |
+| /Users/derekhsieh/vertix/obsidian/postcss.config.js                    | JavaScript         |          6 |          0 |          1 |          7 |
+| /Users/derekhsieh/vertix/obsidian/public/next.svg                      | XML                |          1 |          0 |          0 |          1 |
+| /Users/derekhsieh/vertix/obsidian/public/vercel.svg                    | XML                |          1 |          0 |          0 |          1 |
+| /Users/derekhsieh/vertix/obsidian/stores/behavioralStore.ts            | TypeScript         |         11 |          0 |          6 |         17 |
+| /Users/derekhsieh/vertix/obsidian/stores/compilationStore.ts           | TypeScript         |         27 |          0 |         10 |         37 |
+| /Users/derekhsieh/vertix/obsidian/stores/dataStore.ts                  | TypeScript         |          9 |          0 |          3 |         12 |
+| /Users/derekhsieh/vertix/obsidian/stores/globalState.ts                | TypeScript         |         25 |          0 |          6 |         31 |
+| /Users/derekhsieh/vertix/obsidian/stores/priorStore.ts                 | TypeScript         |         34 |          1 |         12 |         47 |
+| /Users/derekhsieh/vertix/obsidian/tailwind.config.js                   | JavaScript         |         75 |          1 |          0 |         76 |
+| /Users/derekhsieh/vertix/obsidian/tailwind.config.ts                   | TypeScript         |         21 |          0 |          2 |         23 |
+| /Users/derekhsieh/vertix/obsidian/tsconfig.json                        | JSON with Comments |         26 |          2 |          1 |         29 |
+| /Users/derekhsieh/vertix/obsidian/utils/bagOfWords.ts                  | TypeScript         |         90 |        228 |         70 |        388 |
+| /Users/derekhsieh/vertix/obsidian/utils/compileClient.ts               | TypeScript         |         26 |          0 |          8 |         34 |
+| /Users/derekhsieh/vertix/obsidian/utils/speechClient.ts                | TypeScript         |         31 |          0 |          8 |         39 |
+| /Users/derekhsieh/vertix/obsidian/utils/stopWords.ts                   | TypeScript         |          1 |          0 |          0 |          1 |
+| /Users/derekhsieh/vertix/obsidian/utils/syntaxHighlight.ts             | TypeScript         |         18 |          8 |          3 |         29 |
+| /Users/derekhsieh/vertix/obsidian/utils/talkingNaiveBayes.ts           | TypeScript         |         52 |          3 |         20 |         75 |
+| Total                                                                  |                    |      9,762 |        369 |        621 |     10,752 |
++------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

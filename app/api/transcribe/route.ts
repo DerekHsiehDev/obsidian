@@ -6,12 +6,12 @@ import openai from "@/lib/OpenaiConfig";
 const util = require("util");
 const execAsync = util.promisify(exec);
 
-
-
 export async function POST(request: NextRequest) {
-  const { audio } = await request.json();
+  // const { audio } = await request.json();
 
-  const audioData = Buffer.from(audio, 'base64');
+  // const audioData = Buffer.from(audio, 'base64');
+  const { audio } = await request.json();
+  const audioData = Buffer.from(audio.split(",")[1], "base64");
 
   try {
     // Convert the audio data to text
@@ -19,7 +19,10 @@ export async function POST(request: NextRequest) {
     // Return the transcribed text in the response
     return NextResponse.json({ result: text }, { status: 200 });
   } catch (error) {
-    const err = error as { response?: { status: any, data: any }, message?: string };
+    const err = error as {
+      response?: { status: any; data: any };
+      message?: string;
+    };
 
     if (err.response) {
       console.error(err.response.status, err.response.data);

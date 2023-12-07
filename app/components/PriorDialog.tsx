@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useBehavioralStore } from "@/stores/behavioralStore";
 import { useGlobalState } from "@/stores/globalState";
 import { usePriorStore } from "@/stores/priorStore";
 import { CheckCircleIcon } from "lucide-react";
@@ -157,6 +158,9 @@ const PriorDialog = () => {
     setGithubDailyCommits,
   } = usePriorStore();
 
+  const { currentInterviewPrompt, setCurrentInterviewPrompt } =
+    useBehavioralStore();
+
   function dayOfWeekEffect(dataset: any): { [key: string]: number } {
     let contributionsPerDay: { [key: string]: number[] } = {
       Sunday: [],
@@ -241,18 +245,17 @@ const PriorDialog = () => {
 
       // get 75% of dataset
       const trainingDataset = {
-        totalContributions: dataset.totalContributions ,
-        weeks: dataset.weeks.slice(
-        0,
-        Math.floor(dataset.weeks.length * 0.90)
-      )};
+        totalContributions: dataset.totalContributions,
+        weeks: dataset.weeks.slice(0, Math.floor(dataset.weeks.length * 0.9)),
+      };
 
       const testingDataset = {
         totalContributions: dataset.totalContributions,
         weeks: dataset.weeks.slice(
-        Math.floor(dataset.weeks.length * 0.90),
-        dataset.length
-      )};
+          Math.floor(dataset.weeks.length * 0.9),
+          dataset.length
+        ),
+      };
 
       const probabilities = calculateProbability(trainingDataset);
 
@@ -269,9 +272,8 @@ const PriorDialog = () => {
       // Forecast commit activity for the next 7 days
       const forecast = forecastCommitActivity(probabilities, 7);
 
-
       const error = calculateError(testingDataset, forecast);
-      console.log("error", error)
+      console.log("error", error);
       console.log("forecast", forecast);
 
       // Prepare the forecasted data for the chart
@@ -297,7 +299,29 @@ const PriorDialog = () => {
       setOpenEyeTracking(true);
     }
 
-    console.log(fileContent);
+    console.log("FETCHING");
+
+    fetch("/api/gpt/turbo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ resume: fileContent }),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        let cleanedText = res.text.replace(/\n/g, "");
+        cleanedText = cleanedText.replace(/```json(.*)```/g, "$1");
+        console.log(cleanedText);
+
+
+        let questions = JSON.parse(cleanedText);
+        setQuestionsAndAnswers(questions);
+
+        setCurrentInterviewPrompt(
+          currentInterviewPrompt + questions[0].QUESTION
+        );
+      });
   };
 
   const transformAndCombineData = (actualData, forecastData) => {
@@ -331,10 +355,16 @@ const PriorDialog = () => {
     return combinedData;
   };
 
-  const {hasAddedPrior, setHasAddedPrior, setOpenEyeTracking} = useGlobalState();
+  const {
+    hasAddedPrior,
+    setHasAddedPrior,
+    setOpenEyeTracking,
+    questionsAndAnswers,
+    setQuestionsAndAnswers,
+  } = useGlobalState();
 
   return (
-    <Dialog onOpenChange={() => setHasAddedPrior(true)}  open={!hasAddedPrior}>
+    <Dialog onOpenChange={() => setHasAddedPrior(true)} open={!hasAddedPrior}>
       <DialogTrigger>
         <button className="ml-6 inline-flex items-center rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">
           Reset Priors

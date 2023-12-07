@@ -1,0 +1,63 @@
+"filename", "language", "JSON with Comments", "TypeScript", "JSON", "XML", "TypeScript JSX", "JavaScript", "Markdown", "CSS", "comment", "blank", "total"
+"/Users/derekhsieh/vertix/obsidian/.eslintrc.json", "JSON with Comments", 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4
+"/Users/derekhsieh/vertix/obsidian/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 23, 0, 0, 14, 37
+"/Users/derekhsieh/vertix/obsidian/app/api/compile/route.ts", "TypeScript", 0, 146, 0, 0, 0, 0, 0, 0, 8, 29, 183
+"/Users/derekhsieh/vertix/obsidian/app/api/github/route.ts", "TypeScript", 0, 69, 0, 0, 0, 0, 0, 0, 2, 7, 78
+"/Users/derekhsieh/vertix/obsidian/app/api/gpt/route.ts", "TypeScript", 0, 23, 0, 0, 0, 0, 0, 0, 1, 7, 31
+"/Users/derekhsieh/vertix/obsidian/app/api/gpt/turbo/route.ts", "TypeScript", 0, 30, 0, 0, 0, 0, 0, 0, 0, 5, 35
+"/Users/derekhsieh/vertix/obsidian/app/api/pdf/route.ts", "TypeScript", 0, 14, 0, 0, 0, 0, 0, 0, 1, 5, 20
+"/Users/derekhsieh/vertix/obsidian/app/api/speech/route.ts", "TypeScript", 0, 33, 0, 0, 0, 0, 0, 0, 2, 18, 53
+"/Users/derekhsieh/vertix/obsidian/app/api/transcribe/route.ts", "TypeScript", 0, 51, 0, 0, 0, 0, 0, 0, 13, 8, 72
+"/Users/derekhsieh/vertix/obsidian/app/api/vision/route.ts", "TypeScript", 0, 147, 0, 0, 0, 0, 0, 0, 4, 19, 170
+"/Users/derekhsieh/vertix/obsidian/app/api/vision/vision.type.ts", "TypeScript", 0, 64, 0, 0, 0, 0, 0, 0, 0, 4, 68
+"/Users/derekhsieh/vertix/obsidian/app/components/Button.tsx", "TypeScript JSX", 0, 0, 0, 0, 21, 0, 0, 0, 0, 4, 25
+"/Users/derekhsieh/vertix/obsidian/app/components/ChatContent.tsx", "TypeScript JSX", 0, 0, 0, 0, 249, 0, 0, 0, 11, 39, 299
+"/Users/derekhsieh/vertix/obsidian/app/components/ClockTimer.tsx", "TypeScript JSX", 0, 0, 0, 0, 45, 0, 0, 0, 1, 9, 55
+"/Users/derekhsieh/vertix/obsidian/app/components/CodeConsole.tsx", "TypeScript JSX", 0, 0, 0, 0, 101, 0, 0, 0, 2, 8, 111
+"/Users/derekhsieh/vertix/obsidian/app/components/CodeEditor.tsx", "TypeScript JSX", 0, 0, 0, 0, 16, 0, 0, 0, 0, 6, 22
+"/Users/derekhsieh/vertix/obsidian/app/components/ContributionChart.tsx", "TypeScript JSX", 0, 0, 0, 0, 28, 0, 0, 0, 32, 7, 67
+"/Users/derekhsieh/vertix/obsidian/app/components/Logo.tsx", "TypeScript JSX", 0, 0, 0, 0, 22, 0, 0, 0, 0, 3, 25
+"/Users/derekhsieh/vertix/obsidian/app/components/MeanChart.tsx", "TypeScript JSX", 0, 0, 0, 0, 29, 0, 0, 0, 0, 6, 35
+"/Users/derekhsieh/vertix/obsidian/app/components/Navbar.tsx", "TypeScript JSX", 0, 0, 0, 0, 81, 0, 0, 0, 2, 11, 94
+"/Users/derekhsieh/vertix/obsidian/app/components/PriorDialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 391, 0, 0, 0, 13, 68, 472
+"/Users/derekhsieh/vertix/obsidian/app/components/StatsContent.tsx", "TypeScript JSX", 0, 0, 0, 0, 202, 0, 0, 0, 1, 12, 215
+"/Users/derekhsieh/vertix/obsidian/app/components/StatsGraphView.tsx", "TypeScript JSX", 0, 0, 0, 0, 36, 0, 0, 0, 15, 7, 58
+"/Users/derekhsieh/vertix/obsidian/app/components/VideoContent.tsx", "TypeScript JSX", 0, 0, 0, 0, 63, 0, 0, 0, 6, 22, 91
+"/Users/derekhsieh/vertix/obsidian/app/components/Webcam.tsx", "TypeScript JSX", 0, 0, 0, 0, 7, 0, 0, 0, 0, 3, 10
+"/Users/derekhsieh/vertix/obsidian/app/globals.css", "CSS", 0, 0, 0, 0, 0, 0, 0, 65, 1, 22, 88
+"/Users/derekhsieh/vertix/obsidian/app/layout.tsx", "TypeScript JSX", 0, 0, 0, 0, 19, 0, 0, 0, 0, 3, 22
+"/Users/derekhsieh/vertix/obsidian/app/page.tsx", "TypeScript JSX", 0, 0, 0, 0, 28, 0, 0, 0, 0, 5, 33
+"/Users/derekhsieh/vertix/obsidian/components.json", "JSON", 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 16
+"/Users/derekhsieh/vertix/obsidian/components/EyeCalibration.tsx", "TypeScript JSX", 0, 0, 0, 0, 89, 0, 0, 0, 1, 18, 108
+"/Users/derekhsieh/vertix/obsidian/components/Modal.tsx", "TypeScript JSX", 0, 0, 0, 0, 18, 0, 0, 0, 0, 5, 23
+"/Users/derekhsieh/vertix/obsidian/components/ui/alert-dialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 127, 0, 0, 0, 0, 15, 142
+"/Users/derekhsieh/vertix/obsidian/components/ui/button.tsx", "TypeScript JSX", 0, 0, 0, 0, 51, 0, 0, 0, 0, 6, 57
+"/Users/derekhsieh/vertix/obsidian/components/ui/dialog.tsx", "TypeScript JSX", 0, 0, 0, 0, 109, 0, 0, 0, 0, 14, 123
+"/Users/derekhsieh/vertix/obsidian/components/ui/tabs.tsx", "TypeScript JSX", 0, 0, 0, 0, 48, 0, 0, 0, 0, 8, 56
+"/Users/derekhsieh/vertix/obsidian/components/ui/tooltip.tsx", "TypeScript JSX", 0, 0, 0, 0, 23, 0, 0, 0, 0, 8, 31
+"/Users/derekhsieh/vertix/obsidian/hooks/useWindowSize.ts", "TypeScript", 0, 20, 0, 0, 0, 0, 0, 0, 0, 6, 26
+"/Users/derekhsieh/vertix/obsidian/lib/OpenaiConfig.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 3, 8
+"/Users/derekhsieh/vertix/obsidian/lib/constants.ts", "TypeScript", 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/Users/derekhsieh/vertix/obsidian/lib/correctCode.ts", "TypeScript", 0, 129, 0, 0, 0, 0, 0, 0, 0, 25, 154
+"/Users/derekhsieh/vertix/obsidian/lib/utils.ts", "TypeScript", 0, 5, 0, 0, 0, 0, 0, 0, 0, 2, 7
+"/Users/derekhsieh/vertix/obsidian/next.config.js", "JavaScript", 0, 0, 0, 0, 0, 15, 0, 0, 10, 7, 32
+"/Users/derekhsieh/vertix/obsidian/package-lock.json", "JSON", 0, 0, 6587, 0, 0, 0, 0, 0, 0, 1, 6588
+"/Users/derekhsieh/vertix/obsidian/package.json", "JSON", 0, 0, 59, 0, 0, 0, 0, 0, 0, 1, 60
+"/Users/derekhsieh/vertix/obsidian/postcss.config.js", "JavaScript", 0, 0, 0, 0, 0, 6, 0, 0, 0, 1, 7
+"/Users/derekhsieh/vertix/obsidian/public/next.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/derekhsieh/vertix/obsidian/public/vercel.svg", "XML", 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1
+"/Users/derekhsieh/vertix/obsidian/stores/behavioralStore.ts", "TypeScript", 0, 11, 0, 0, 0, 0, 0, 0, 0, 6, 17
+"/Users/derekhsieh/vertix/obsidian/stores/compilationStore.ts", "TypeScript", 0, 27, 0, 0, 0, 0, 0, 0, 0, 10, 37
+"/Users/derekhsieh/vertix/obsidian/stores/dataStore.ts", "TypeScript", 0, 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"/Users/derekhsieh/vertix/obsidian/stores/globalState.ts", "TypeScript", 0, 25, 0, 0, 0, 0, 0, 0, 0, 6, 31
+"/Users/derekhsieh/vertix/obsidian/stores/priorStore.ts", "TypeScript", 0, 34, 0, 0, 0, 0, 0, 0, 1, 12, 47
+"/Users/derekhsieh/vertix/obsidian/tailwind.config.js", "JavaScript", 0, 0, 0, 0, 0, 75, 0, 0, 1, 0, 76
+"/Users/derekhsieh/vertix/obsidian/tailwind.config.ts", "TypeScript", 0, 21, 0, 0, 0, 0, 0, 0, 0, 2, 23
+"/Users/derekhsieh/vertix/obsidian/tsconfig.json", "JSON with Comments", 26, 0, 0, 0, 0, 0, 0, 0, 2, 1, 29
+"/Users/derekhsieh/vertix/obsidian/utils/bagOfWords.ts", "TypeScript", 0, 90, 0, 0, 0, 0, 0, 0, 228, 70, 388
+"/Users/derekhsieh/vertix/obsidian/utils/compileClient.ts", "TypeScript", 0, 26, 0, 0, 0, 0, 0, 0, 0, 8, 34
+"/Users/derekhsieh/vertix/obsidian/utils/speechClient.ts", "TypeScript", 0, 31, 0, 0, 0, 0, 0, 0, 0, 8, 39
+"/Users/derekhsieh/vertix/obsidian/utils/stopWords.ts", "TypeScript", 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1
+"/Users/derekhsieh/vertix/obsidian/utils/syntaxHighlight.ts", "TypeScript", 0, 18, 0, 0, 0, 0, 0, 0, 8, 3, 29
+"/Users/derekhsieh/vertix/obsidian/utils/talkingNaiveBayes.ts", "TypeScript", 0, 52, 0, 0, 0, 0, 0, 0, 3, 20, 75
+"Total", "-", 29, 1082, 6662, 2, 1803, 96, 23, 65, 369, 621, 10752

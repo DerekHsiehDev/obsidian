@@ -15,6 +15,8 @@ enum Tab {
 }
 
 const StatsContent = () => {
+
+  const {similarityScore} = useBehavioralStore()
   const { githubCommits, githubDailyCommits, medianMeanVariance } =
     usePriorStore();
   return (
@@ -25,7 +27,7 @@ const StatsContent = () => {
         <TabsTrigger value={Tab.gpt}>GPT</TabsTrigger>
       </TabsList>
       <TabsContent value={Tab.stats}>
-        <div className="flex flex-col overflow-auto">
+        <div className="flex flex-col overflow-auto h-96 overflow-y-auto">
           <div className="font-bold">GitHub Stats</div>
           <div className="w-full">
             <StatsGraphView combinedData={githubCommits} />
@@ -33,6 +35,8 @@ const StatsContent = () => {
           <div className="w-full flex justify-center">
             <Barchart data={medianMeanVariance} />
           </div>
+          <div className="font-bold">Interview talking Stats</div>
+          <BehavioralChart chartData={similarityScore} />
         </div>
       </TabsContent>
       <TabsContent value={Tab.web} className="w-full">
@@ -210,5 +214,32 @@ function IMessageUI() {
     </div>
   );
 }
+
+import { Chart } from "react-google-charts";
+import { useBehavioralStore } from "@/stores/behavioralStore";
+
+const BehavioralChart = ({ chartData }) => {
+  const data = [
+    ["Question", "Similarity to Source of Truth"],
+    ...chartData.map((similarity, index) => [
+      `Question ${index + 1}`,
+      similarity,
+    ]),
+  ];
+
+  return (
+    <Chart
+      width={"500px"}
+      height={"300px"}
+      chartType="Table"
+      loader={<div>Loading Chart</div>}
+      data={data}
+      options={{
+        showRowNumber: true,
+      }}
+      rootProps={{ "data-testid": "1" }}
+    />
+  );
+};
 
 export default StatsContent;

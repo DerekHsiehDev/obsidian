@@ -4,7 +4,7 @@ import Button from "./Button";
 import speechToText from "@/utils/speechClient";
 import CodeEditor from "./CodeEditor";
 import codeCompilationClient from "@/utils/compileClient";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RocketLaunchIcon } from "@heroicons/react/20/solid";
 import CodeConsole from "./CodeConsole";
 import {
@@ -30,6 +30,10 @@ import { useBehavioralStore } from "@/stores/behavioralStore";
 const data = {
   text: "We'll start with a brief overview of your experience and skills, and then proceed to some technical questions related to your field. Please feel free to ask any questions or seek clarifications at any point.",
 };
+
+import { useWhisper } from "@chengsokdara/use-whisper";
+import { useGlobalState } from "@/stores/globalState";
+import talkingNaiveBayes from "@/utils/talkingNaiveBayes";
 
 interface Error {
   message: string;
@@ -58,13 +62,34 @@ const prompt = `
 </ul>
 `;
 
-
 const ChatContent = () => {
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
+    null
+  );
+
+  const { transcript, startRecording, stopRecording, transcribing } =
+    useWhisper({
+      apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+      streaming: true,
+      whisperConfig: {
+        language: "en",
+      },
+      nonStop: true, // keep recording as long as the user is speaking
+      stopTimeout: 4000,
+    });
+
+  const [aiInterviewerState, setAiInterviewerState] = useState<
+    "talking" | "listening" | "paused" | "synthesizing"
+  >("paused");
+
   const [currentCode, setCurrentCode] = useState("");
 
   const [isPromptVisible, setPromptVisible] = useState(true);
 
   const [isErrorSubmitOpen, setIsErrorSubmitOpen] = useState(false);
+  const [isSuccessSubmitOpen, setIsSuccessSubmitOpen] = useState(false);
+
+  const [codeCorrectness, setCodeCorrectness] = useState<number>(0);
 
   const togglePrompt = () => {
     setPromptVisible(!isPromptVisible);
@@ -72,9 +97,14 @@ const ChatContent = () => {
 
   const [isShowingCodeProblem, setIsShowingCodeProblem] = useState(false);
 
-  const { currentInterviewPrompt, setCurrentInterviewPrompt} = useBehavioralStore();
+  const {
+    currentInterviewPrompt,
+    setCurrentInterviewPrompt,
+    appendSimilarityScore,
+    similarityScore,
+  } = useBehavioralStore();
 
-  const [aiInterviewerState, setAiInterviewerState] = useState<"talking" | "listening" | "paused">("paused");
+  const { questionsAndAnswers, setIsCodeProblemOpen, timeSpentOnChatAndTools } = useGlobalState();
 
   const {
     output,
@@ -88,6 +118,50 @@ const ChatContent = () => {
   const handleEditorChange = (newCode: string | undefined) => {
     if (newCode) {
       setCurrentCode(newCode);
+    }
+  };
+
+  const handlePlayAudio = async (text: string) => {
+    if (aiInterviewerState === "paused") {
+      setAiInterviewerState("talking");
+      const finishedState = await speechToText(text);
+      setAiInterviewerState("listening");
+      startRecording(); // Start recording after AI finishes talking
+    } else if (aiInterviewerState === "listening") {
+      stopRecording(); // Stop recording when user finishes speaking
+      // setCurrentInterviewPrompt(questionsAndAnswers.shift());
+      setAiInterviewerState("synthesizing");
+
+      console.log("TRANSCRIPT", transcript.text);
+      // get bayes
+
+      console.log("questions", questionsAndAnswers);
+
+      console.log("ANSWER", questionsAndAnswers[0].ANSWER);
+      const similiarty = talkingNaiveBayes(
+        transcript.text,
+        questionsAndAnswers[0].ANSWER
+      );
+
+      appendSimilarityScore(similiarty);
+
+      console.log("SIMILIARITY", similiarty);
+
+      if (questionsAndAnswers.length === 1) {
+        setIsShowingCodeProblem(true);
+        setIsCodeProblemOpen(true);
+        return;
+      }
+      questionsAndAnswers.shift();
+
+      setAiInterviewerState("talking");
+      const finishedState = await speechToText(questionsAndAnswers[0].QUESTION);
+      setAiInterviewerState("listening");
+      startRecording(); // Start recording after AI finishes talking
+    } else if (aiInterviewerState === "synthesizing") {
+      console.log("SYNTHESIZING");
+      // Get probabilities with naive bayes
+      console.log(transcript.text);
     }
   };
 
@@ -106,7 +180,7 @@ const ChatContent = () => {
       // first check with normal typescript Type typing syntax
       // console.log(naiveBayes(typeTyping + "\n" + testCode, currentCode));
 
-      maxScore = Math.max(maxScore, naiveBayes(testCode, currentCode));
+      maxScore = Math.max(maxScore, naiveBayes(testCode, currentCode, timeSpendOnChatAndTools));
 
       // console.log(naiveBayes(testCode, currentCode))
 
@@ -116,8 +190,11 @@ const ChatContent = () => {
 
     console.log("max score", maxScore);
 
+    setCodeCorrectness(maxScore * 100);
+
     // success
-    alert("Success! You can now move on to the next question.");
+    setIsSuccessSubmitOpen(true);
+    // alert("Success! You can now move on to the next question.");
   };
 
   const handleCompile = async () => {
@@ -152,12 +229,6 @@ const ChatContent = () => {
     );
 
     return <div dangerouslySetInnerHTML={{ __html: prompt }} />;
-  };
-
-  const handlePlayAudio = async (text: string) => {
-    setAiInterviewerState("talking")
-    const finishedState = await speechToText(text);
-    setAiInterviewerState("listening");
   };
 
   return (
@@ -198,6 +269,24 @@ const ChatContent = () => {
           <CodeEditor onChange={handleEditorChange} />
 
           <CodeConsole />
+          <AlertDialog
+            open={isSuccessSubmitOpen}
+            onOpenChange={setIsSuccessSubmitOpen}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Successful Submission!</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {`Your solution was correct! It was ${
+                    Math.round(codeCorrectness * 10) / 10
+                  }% similar to the expected solution. You can try again or log off. Your interview is complete!`}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction color="green">Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           <AlertDialog
             open={isErrorSubmitOpen}
@@ -220,9 +309,14 @@ const ChatContent = () => {
       ) : (
         <div className="flex flex-col justify-center items-center h-full">
           <div className="text-2xl font-bold text-center">
-            Welcome to your interview!
+            {aiInterviewerState === "paused" && "Welcome to your interview!"}
           </div>
           <div className="text-center">
+            <div className="text-lg font-bold text-center m-3">
+              {aiInterviewerState !== "paused" &&
+                questionsAndAnswers[0]?.QUESTION}
+            </div>
+            <div className="text-md text-center m-3">{transcript.text}</div>
             <button
               type="button"
               className="inline-flex items-center gap-x-1.5 rounded-md bg-green-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
